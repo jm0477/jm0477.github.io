@@ -1,0 +1,756 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Linux," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="ssh及openssh的应用
+1. ssh及openssl简介：
+SSH：
+ssh是secure shell，是用来通过网络来提供安全的远程访问的工具，C/S结构，在ssh之前，最早的远程计算机连接工具是telnet
+telnet是使用明文通信的，所以安全性很差，除非紧急情况，否则不要使用telnet。
+ssh则比telnet安全许多，而openssl则是ssh的一种开源实现，
+OPENSSH
+它">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CentOS6下ssh简介及openssh的应用">
+<meta property="og:url" content="http://yoursite.com/2015/07/02/CentOS6下ssh简介及openssh的应用/index.html">
+<meta property="og:site_name" content="Richie's Personal Blog">
+<meta property="og:description" content="ssh及openssh的应用
+1. ssh及openssl简介：
+SSH：
+ssh是secure shell，是用来通过网络来提供安全的远程访问的工具，C/S结构，在ssh之前，最早的远程计算机连接工具是telnet
+telnet是使用明文通信的，所以安全性很差，除非紧急情况，否则不要使用telnet。
+ssh则比telnet安全许多，而openssl则是ssh的一种开源实现，
+OPENSSH
+它">
+<meta property="og:updated_time" content="2017-01-29T02:01:28.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CentOS6下ssh简介及openssh的应用">
+<meta name="twitter:description" content="ssh及openssh的应用
+1. ssh及openssl简介：
+SSH：
+ssh是secure shell，是用来通过网络来提供安全的远程访问的工具，C/S结构，在ssh之前，最早的远程计算机连接工具是telnet
+telnet是使用明文通信的，所以安全性很差，除非紧急情况，否则不要使用telnet。
+ssh则比telnet安全许多，而openssl则是ssh的一种开源实现，
+OPENSSH
+它">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2015/07/02/CentOS6下ssh简介及openssh的应用/"/>
+
+
+
+
+
+  <title> CentOS6下ssh简介及openssh的应用 | Richie's Personal Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Richie's Personal Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle">Life is short, do something meaningful!</p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/07/02/CentOS6下ssh简介及openssh的应用/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Richie Jing">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar.gif">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Richie's Personal Blog">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Richie's Personal Blog" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                CentOS6下ssh简介及openssh的应用
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2015-07-02T15:13:27+08:00">
+                2015-07-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>ssh及openssh的应用</p>
+<p>1. ssh及openssl简介：</p>
+<p>SSH：</p>
+<p>ssh是secure shell，是用来通过网络来提供安全的远程访问的工具，C/S结构，在ssh之前，最早的远程计算机连接工具是telnet</p>
+<p>telnet是使用明文通信的，所以安全性很差，除非紧急情况，否则不要使用telnet。</p>
+<p>ssh则比telnet安全许多，而openssl则是ssh的一种开源实现，</p>
+<p>OPENSSH</p>
+<p>它可以作为 rlogin、 rsh rcp 以及 telnet 的直接替代品使用。 更进一步， 其他任何 TCP/IP 连接都可以通过 SSH<br>安全地进行隧道/转发。 OpenSSH 对所有的传输进行加密， 从而有效地阻止了窃听、 连接劫持， 以及其他网络级的攻击。OpenSSH 由 OpenBSD<br>project 维护。</p>
+<p>登录过程和使用 rlogin 或 telnet 建立的会话非常类似。 在连接时， SSH 会利用一个密钥指纹系统来验证服务器的真实性。 只有在第一次连接时，<br>用户会被要求输入 yes。 之后的连接将会验证预先保存下来的密钥指纹。 如果保存的指纹与登录时接收到的不符， 则将会给出警告。 指纹保存在<br>~/.ssh/known_hosts 中， 对于 SSH v2 指纹， 则是 ~/.ssh/known_hosts2。</p>
+<p>默认情况下， 较新版本的 OpenSSH 只接受 SSH v2 连接。 如果能用版本 2 则客户程序会自动使用， 否则它会返回使用版本 1 的模式。 此外，<br>也可以通过命令行参数 -1 或 -2 来相应地强制使用版本 1 或 2。 保持客户端的版本 1 能力是为了考虑较早版本的兼容性。</p>
+<p>SSH有两个版本：</p>
+<p>1. sshv1</p>
+<p>sshv1 基于CRC-32做MAC(完整性校验)，无加密，只是校验码，强烈建议不使用。非常不安全</p>
+<p>2. sshv2</p>
+<p>sshv2 基于双方主机的协商选择使用最安全的MAC方式</p>
+<p>加密机制及MAC机制由双方协商选定：</p>
+<p>基于DH算法，实现密钥交换，基于RSA或DSA实现身份认证</p>
+<p>客户端通过检查服务器端的主机密钥来判断是否能够继续通信</p>
+<p>实际使用中，可以通过命令行参数Protocol 2,1 来相应地强制使用版本 1 或 2。</p>
+<p>保持客户端的版本 1 能力是为了考虑较早版本的兼容性。</p>
+<p>也可以只写2，而放弃兼容不安全的sshv1</p>
+<p>2. OPENSSH客户端：</p>
+<p>openssh是C/S架构,所以就有服务端和客户端两部分组成，linux下常用的客户端软件ssh,<br>windows下常用的有putty,xshell,secrecrt,sshshellclient等</p>
+<p>2.1 openssh的客户端组件：</p>
+<p>2.1.1 ssh 配置文件是/etc/ssh/ssh_config</p>
+<p>语法：</p>
+<p>ssh [username]@host [COMMAND] [-p PORT]</p>
+<p>ssh -l username host [COMMAND]</p>
+<p>#若没指定username，则使用本地当前用户尝试登陆，如果远程主机不存在此用户，会报错</p>
+<p>#COMMAND，就是不远程登陆，只是在远程主机上执行COMMAND，然后将结果返回给本机。</p>
+<p>例如：</p>
+<p>需要获取192.168.229.202主机的ifconfig信息，ssh端口监听在2222端口上：</p>
+<p>#ssh root@192.168.229.202 ifconfig -p 7767</p>
+<p>2.1.2 scp: 利用ssh协议在主机之间实现安全文件传输的工具</p>
+<p>语法：</p>
+<p>scp SRC1…DEST</p>
+<p>分两种情况：</p>
+<p>1. 原文件在本机，目标为远程</p>
+<p>#scp /path/to/somefile …USERNAME@HOST:/path/to/somewhere</p>
+<p>是将本地/path/to/somefile文件，以USERNAME用户登陆到远程主机HOST上，复制到远程主机的/path/to/somewhere</p>
+<p>例如：</p>
+<p>将本地/etc/fstab文件复制到www.881027.com主机上/tmp下, 注意www.881027.com主机的ssh端口是2222</p>
+<p>#scp -P 2222 /etc/fstab root@www.881027.com:/tmp</p>
+<p>#注意， 参数-P的位置一定要紧跟在scp命令后面，而且-P指定的是远程主机的ssh端口</p>
+<p>#注意， 如果当前本机登陆的用户是root，则root@www.881027.com中的root@可以省略</p>
+<p>2. 源文件在远程，本地为目标</p>
+<p>#scp USERNAME@HOST:/path/to/somewhere /path/to/somewhere</p>
+<p>-r: 复制目录时使用</p>
+<p>-p: 保持源文件的元数据信息，包括属主，属组，mode，timestamp (如果远程主机不存在这个用户，也不行)</p>
+<p>-q: 静默模式</p>
+<p>-P PORT： 指定ssh协议监听的端口</p>
+<p>例如：</p>
+<p>将远程主机/tmp/fstab文件下载到本机/etc下</p>
+<p>#scp -P 2222 root@www.881027.com /etc</p>
+<p>2.1.3 sftp: 基于ssh的ftp服务</p>
+<p>sftp登陆进去，可以使用很多bash的命令，例如ls,cd, mkdir, put, get等ftp命令</p>
+<p>用法： sftp USERNAME@HOST</p>
+<p>例如：</p>
+<p>sftp登陆到www.881027.com,ssh端口2222，并下载www.881027.com主机上/etc/fstab文件到本地</p>
+<p>#sftp -oPort=2222 sbi.881027.com</p>
+<p>#-oPort 来指定远程的端口，不指定默认22</p>
+<p>3. openssh的服务器端： sshd</p>
+<p>配置文件： /etc/ssh/sshd_config</p>
+<p>ssh端口，控制sshd服务的各种运行参数等，下面最佳实践里有很多应用</p>
+<p>这个命令可以通过</p>
+<p>#man sshd_config</p>
+<p>来查看每一个参数的详细说明和使用帮助</p>
+<p>服务脚本： /etc/rc.d/init.d/sshd</p>
+<p>控制sshd服务状态，启动，停止，重启，查看状态等</p>
+<p>脚本配置文件： /etc/sysconfig/sshd</p>
+<p>3.1 经常需要修改的参数：</p>
+<p>PORT： 修改默认监听的端口</p>
+<p>ListenAddress 0.0.0.0 默认表示监听本地所有地址，也可以设定只监听特定ip地址</p>
+<p>Protocol 2,1  优先选择2，向下兼容sshv1</p>
+<p>HostKey /etc/ssh/ssh_host_rsa_key 当客户端连接时候，发送的密钥</p>
+<p>HostKey /etc/ssh/ssh_host_dsa_key 当客户端连接时候，发送的密钥， DSA只能做身份验证</p>
+<p>KeyRegenerationInterval 1h 密钥交换间隔，服务器自动进行的</p>
+<p>LoginGraceTime 2m 登陆窗口宽限期， 就是弹出登陆窗口后，给你输入账号密码的时间</p>
+<p>PermitRootLogin yes</p>
+<p>yes：允许root用户首次直接ssh登录</p>
+<p>no: 不允许root用户首次直接ssh登陆，但是根据需要，可以从普通用户su - root</p>
+<p>MaxAuthTries 6 最多登陆失败次数</p>
+<p>MaxSessions 10 最多可支持的session数</p>
+<p>RSAAuthentication yes 是否启用RSA验证</p>
+<p>PubkeyAuthentication yes 是否启用公钥验证(非对称加密)</p>
+<p>AuthorizedKeysFile .ssh/authorized_keys 授权的密钥文件，<br>我们可以通过追加公钥信息到这个authorized_keys，来免密码登陆</p>
+<p>ClientAliveInterval 0  服务器端向客户端请求消息的时间间隔，0 为不发送</p>
+<p>ClientAliveCountMax 300 服务器发出请求后客户端没有响应的次数达到一定值</p>
+<p>等等</p>
+<p>我只列举一些常用的选项，还有很多选项没有一一列举，可以#man sshd_config去翻文档吧。</p>
+<p>4. sshd认证方式:</p>
+<p>1. 基于口令的认证：</p>
+<p>没啥好说的， 用户名，密码认证</p>
+<p>2. 基于密钥(公钥中的密钥)的认证：</p>
+<p>逻辑：</p>
+<p>a. 需要一对儿密钥，本地保留private key,</p>
+<p>b. 将public key放到远程主机上的用户家目录: ~/.ssh/</p>
+<p>c. 将本地public key追加到 远程主机家目录 ~/.ssh/authorized_users</p>
+<p>步骤：</p>
+<p>#ssh-keygen -t rsa 生成密钥对</p>
+<p>默认密钥为id_rsa, id_rsa.pub</p>
+<p>-f path/to/somefile: 密钥文件保存位置</p>
+<p>-p ‘’ 指定oldpasswd</p>
+<p>也可以使用工具直接生成密钥对儿，直接上传到远程主机：</p>
+<p>#ssh-copy-id -i ~/.ssh/id_rsa.pub USERNAME@HOST</p>
+<p>ssh-copy-id -i id_rsa.pub “-p 7767 root@sbi.881027.com”</p>
+<p>ssh -p 222 hostname</p>
+<p>5. ssh服务的最佳实践：</p>
+<p>1. 不要使用默认端口22</p>
+<p>2. 不要使用protocol 1</p>
+<p>3. 限制可登陆的用户</p>
+<p>白名单：</p>
+<p>AllowUsers user1 user2 user3…</p>
+<p>AllowGroups grp1 grp2 ….</p>
+<p>黑名单：</p>
+<p>DenyUsers user1 user2</p>
+<p>DenyGroups grp1 grp2</p>
+<p>#黑白名单不能同时使用，只能使用一种</p>
+<p>4. 设定空闲会话超时时长</p>
+<p>ClientAliveInterval 300 #秒数</p>
+<p>ClientAliveCountMAX 0 #空闲计数最大值为0</p>
+<p>5. 利用防火墙设置ssh访问策略：</p>
+<p>6. 仅监听在特定的IP地址上，而非本机所有的IP地址</p>
+<p>7. 使用强密码策略</p>
+<p>#tr -dc A-Za-z0-9 &lt; /dev/urandom | head -c 20 | xargs</p>
+<p>8. 使用基于密钥的认证</p>
+<p>9， 禁止使用空密码</p>
+<p>10. 禁止管理员直接登录</p>
+<p>11. 显示ssh的访问频度</p>
+<p>iptables可以做到</p>
+<p>12. 做好日志，经常分析</p>
+<p>把服务器按照最佳实践来优化一番，在去对比下 lastb的ssh攻击，就会看到明显的效果。等以后学到iptables，在做更进一步的优化吧。</p>
+<p>另外，提一个小软件 dropbear，是嵌入式轻量级的shh客户端工具，可以编译安装试试。比openssh小很多，但是功能却很完整的ssh开源工具。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Linux/" rel="tag"># Linux</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/06/30/PowerShell脚本保留目录结构删除文件实例/" rel="next" title="PowerShell脚本保留目录结构删除文件实例">
+                <i class="fa fa-chevron-left"></i> PowerShell脚本保留目录结构删除文件实例
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/07/05/CentOS6上DNS服务器的安装配置-基础篇/" rel="prev" title="CentOS6上DNS服务器的安装配置-基础篇">
+                CentOS6上DNS服务器的安装配置-基础篇 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview sidebar-panel sidebar-panel-active">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="Richie Jing" />
+          <p class="site-author-name" itemprop="name">Richie Jing</p>
+          <p class="site-description motion-element" itemprop="description">Window Server IT pro, love scripting.</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">81</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Richie Jing</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

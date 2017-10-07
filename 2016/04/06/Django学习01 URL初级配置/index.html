@@ -1,0 +1,675 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Django," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="Django学习 URL初级配置
+常见的URL传值分两类：
+1. www.881027.com/?id=123?name=richie
+涉及到的模块：
+views.py：
+需要配置一个time的view函数，来接受request，使用request.GET.get(‘id’)的形式来依次接受从左至右的参数值，多个参数之间用&amp;amp;连接，例如www.881027.com/time/?id=123?">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Django学习01 URL初级配置">
+<meta property="og:url" content="http://yoursite.com/2016/04/06/Django学习01 URL初级配置/index.html">
+<meta property="og:site_name" content="Richie's Personal Blog">
+<meta property="og:description" content="Django学习 URL初级配置
+常见的URL传值分两类：
+1. www.881027.com/?id=123?name=richie
+涉及到的模块：
+views.py：
+需要配置一个time的view函数，来接受request，使用request.GET.get(‘id’)的形式来依次接受从左至右的参数值，多个参数之间用&amp;amp;连接，例如www.881027.com/time/?id=123?">
+<meta property="og:updated_time" content="2017-01-29T02:01:28.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Django学习01 URL初级配置">
+<meta name="twitter:description" content="Django学习 URL初级配置
+常见的URL传值分两类：
+1. www.881027.com/?id=123?name=richie
+涉及到的模块：
+views.py：
+需要配置一个time的view函数，来接受request，使用request.GET.get(‘id’)的形式来依次接受从左至右的参数值，多个参数之间用&amp;amp;连接，例如www.881027.com/time/?id=123?">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/04/06/Django学习01 URL初级配置/"/>
+
+
+
+
+
+  <title> Django学习01 URL初级配置 | Richie's Personal Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Richie's Personal Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle">Life is short, do something meaningful!</p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/04/06/Django学习01 URL初级配置/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Richie Jing">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar.gif">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Richie's Personal Blog">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Richie's Personal Blog" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Django学习01 URL初级配置
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-04-06T15:07:20+08:00">
+                2016-04-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Django学习 URL初级配置</p>
+<p>常见的URL传值分两类：</p>
+<p>1. www.881027.com/?id=123?name=richie</p>
+<p>涉及到的模块：</p>
+<p>views.py：</p>
+<p>需要配置一个time的view函数，来接受request，使用request.GET.get(‘id’)的形式来依次接受从左至右的参数值，多个参数之间用&amp;连接，例如www.881027.com/time/?id=123?name=richie</p>
+<p>def time(request):</p>
+<p>t = loader.get_template(“time.html”)</p>
+<p>id = request.GET.get(‘id’)</p>
+<p>name = request.GET.get(‘name’)</p>
+<p>c = Context({“today”:datetime.datetime.now(),”id”:id,”name”:name},)</p>
+<p>return HttpResponse(t.render(c))</p>
+<p>urls.py:</p>
+<p>主urls配置文件，使用include方法，将匹配到blog/开头的全部转向当前app目录下的blog.urls.py文件</p>
+<p>from django.conf.urls import patterns, include,url</p>
+<p>urlpatterns = patterns(‘blog.views’,</p>
+<p>url(r’blog/‘, include(‘blog.urls’))</p>
+<p>)</p>
+<p>接下来，在当前app目录下，创建urls.py</p>
+<p>from django.conf.urls import patterns, include,url</p>
+<p>urlpatterns = patterns(‘blog.views’,</p>
+<p>url(r’^time/$’, ‘time’),</p>
+<p>)</p>
+<p>time.html:</p>
+<p>此为模板页</p>
+<p>在段输出相应字段即可</p>
+<ul>
+<li><p>Today is  {{ today | date:"Y-m-d" }} </p>
+</li>
+<li><p>ID is  {{ id }} </p>
+</li>
+<li><p>Name is  {{ name }} </p>
+</li>
+</ul>
+<p>2. www.881027.com/time/123/richie</p>
+<p>这种方式用户方式比较友好，但是在urls.py里要配置好需要接受的正则表达式，略复杂：</p>
+<p>views.py：</p>
+<p>def time(request,p1,p2):</p>
+<p>t = loader.get_template(“time.html”)</p>
+<p>c = Context({“today”:datetime.datetime.now(),”id”:p1,”name”:p2})</p>
+<p>return HttpResponse(t.render(c))</p>
+<p>urls.py:</p>
+<p>urlpatterns = patterns(‘blog.views’,</p>
+<p>url(r’^foo/(\d{4})/(\w+)/$’,’foo’), //或者下面一行的写法</p>
+<p>url(r’^bar/(?P\d{4})/(?P\w+)/$’,’bar’), //这行的写法，固定了view函数中调用时候的参数名称</p>
+<p>)</p>
+<p>time.html:</p>
+<p>此为模板页</p>
+<p>在段输出相应字段即可</p>
+<ul>
+<li><p>Today is  {{ today | date:"Y-m-d" }} </p>
+</li>
+<li><p>ID is  {{ id }} </p>
+</li>
+<li><p>Name is  {{ name }} </p>
+</li>
+</ul>
+<p>学习的比较浅薄，先记忆在了解吧。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Django/" rel="tag"># Django</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/04/04/PyCharm在Ubuntu14.04下的安装配置/" rel="next" title="PyCharm在Ubuntu14.04下的安装配置">
+                <i class="fa fa-chevron-left"></i> PyCharm在Ubuntu14.04下的安装配置
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/04/06/Django学习02 初级数据库增删改查/" rel="prev" title="Django学习02 初级数据库增删改查">
+                Django学习02 初级数据库增删改查 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview sidebar-panel sidebar-panel-active">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="Richie Jing" />
+          <p class="site-author-name" itemprop="name">Richie Jing</p>
+          <p class="site-description motion-element" itemprop="description">Window Server IT pro, love scripting.</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">81</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Richie Jing</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

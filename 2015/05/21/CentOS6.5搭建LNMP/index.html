@@ -1,0 +1,719 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Linux," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="CentOS6.5搭建LNMP
+1：查看环境：
+[root@10-4-14-168 html]# cat /etc/redhat-release
+CentOS release 6.5 (Final)
+2：防火墙配置，开启80/3306端口
+vi /etc/sysconfig/iptables
+-A INPUT -m state --state NEW -m tcp -p tcp --dport 8">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CentOS6.5搭建LNMP">
+<meta property="og:url" content="http://yoursite.com/2015/05/21/CentOS6.5搭建LNMP/index.html">
+<meta property="og:site_name" content="Richie's Personal Blog">
+<meta property="og:description" content="CentOS6.5搭建LNMP
+1：查看环境：
+[root@10-4-14-168 html]# cat /etc/redhat-release
+CentOS release 6.5 (Final)
+2：防火墙配置，开启80/3306端口
+vi /etc/sysconfig/iptables
+-A INPUT -m state --state NEW -m tcp -p tcp --dport 8">
+<meta property="og:updated_time" content="2017-01-29T02:01:28.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CentOS6.5搭建LNMP">
+<meta name="twitter:description" content="CentOS6.5搭建LNMP
+1：查看环境：
+[root@10-4-14-168 html]# cat /etc/redhat-release
+CentOS release 6.5 (Final)
+2：防火墙配置，开启80/3306端口
+vi /etc/sysconfig/iptables
+-A INPUT -m state --state NEW -m tcp -p tcp --dport 8">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2015/05/21/CentOS6.5搭建LNMP/"/>
+
+
+
+
+
+  <title> CentOS6.5搭建LNMP | Richie's Personal Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Richie's Personal Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle">Life is short, do something meaningful!</p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/05/21/CentOS6.5搭建LNMP/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Richie Jing">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar.gif">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Richie's Personal Blog">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Richie's Personal Blog" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                CentOS6.5搭建LNMP
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2015-05-21T13:32:03+08:00">
+                2015-05-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>CentOS6.5搭建LNMP</p>
+<p>1：查看环境：</p>
+<pre><code>[root@10-4-14-168 html]# cat /etc/redhat-release
+CentOS release 6.5 (Final)
+</code></pre><p>2：防火墙配置，开启80/3306端口</p>
+<pre><code>vi /etc/sysconfig/iptables
+-A INPUT -m state --state NEW -m tcp -p tcp --dport 80 -j ACCEPT #允许80端口通过防火墙
+-A INPUT -m state --state NEW -m tcp -p tcp --dport 3306 -j ACCEPT #允许3306端口通过防火墙
+
+ps： 这两条必须添加在默认22端口这条规则下面，添加后应该是如下状态：
+
+# Firewall configuration written by system-config-firewall
+# Manual customization of this file is not recommended.
+*filter
+:INPUT ACCEPT [0:0]
+:FORWARD ACCEPT [0:0]
+:OUTPUT ACCEPT [0:0]
+-A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+-A INPUT -p icmp -j ACCEPT
+-A INPUT -i lo -j ACCEPT
+-A INPUT -m state --state NEW -m tcp -p tcp --dport 22 -j ACCEPT
+-A INPUT -m state --state NEW -m tcp -p tcp --dport 80 -j ACCEPT
+-A INPUT -m state --state NEW -m tcp -p tcp --dport 3306 -j ACCEPT
+-A INPUT -j REJECT --reject-with icmp-host-prohibited
+-A FORWARD -j REJECT --reject-with icmp-host-prohibited
+COMMIT
+
+最后重启防火墙使配置生效
+/etc/init.d/iptables restart
+</code></pre><p>关闭SELINUX</p>
+<p>vi/etc/selinux/config, 注释如下两条命令</p>
+<pre><code>#SELINUX=enforcing
+#SELINUXTYPE=targeted
+</code></pre><p>3：配置CentOS 6.0 第三方yum源（CentOS默认的标准源里没有nginx软件包）</p>
+<pre><code>wget http://www.atomicorp.com/installers/atomic
+sh ./atomic
+yum check-update
+</code></pre><p>4：安装开发包和库文件</p>
+<pre><code>yum -y install ntp make openssl openssl-devel pcre pcre-devel libpng libpng-devel libjpeg-6b libjpeg-devel-6b freetype freetype-devel gd gd-devel zlib zlib-devel gcc gcc-c++ libXpm libXpm-devel ncurses ncurses-devel libmcrypt libmcrypt-devel libxml2 libxml2-devel imake autoconf automake screen sysstat compat-libstdc++-33 curl curl-devel
+</code></pre><p>5：卸载已安装的apache、mysql、php</p>
+<pre><code>yum remove httpd
+yum remove mysql
+yum remove php
+</code></pre><p>6：安装nginx</p>
+<pre><code>yum install nginx
+service nginx start
+chkconfig --levels 235 nginx on
+</code></pre><p>//设2、3、5级别开机启动</p>
+<p>7：安装mysql</p>
+<pre><code>yum install mysql mysql-server mysql-devel
+service mysqld start
+chkconfig --levels 235 mysqld on
+</code></pre><p>登陆MySQL删除空用户，修改root密码</p>
+<pre><code>mysql&gt;select user,host,password from mysql.user;
+
+mysql&gt;drop user &apos;&apos;@localhost;
+
+mysql&gt;update mysql.user set password = PASSWORD(&apos;*********&apos;) where user=&apos;root&apos;;
+
+mysql&gt;flush privileges;
+　　
+</code></pre><p>8：安装php</p>
+<pre><code>yum install php lighttpd-fastcgi php-cli php-mysql php-gd php-imap php-ldap
+php-odbc php-pear php-xml php-xmlrpc php-mbstring php-mcrypt php-mssql php-snmp php-soap
+</code></pre><p>//安装php和所需组件使PHP支持MySQL、FastCGI模式</p>
+<pre><code>yum install  php-tidy php-common php-devel php-fpm php-mysql
+service php-fpm start
+chkconfig --levels 235 php-fpm on
+</code></pre><p>9：配置nginx支持php</p>
+<pre><code>mv /etc/nginx/nginx.conf /etc/nginx/nginx.confbak
+</code></pre><p>//将配置文件改为备份文件</p>
+<pre><code>cp /etc/nginx/nginx.conf.default /etc/nginx/nginx.conf
+</code></pre><p>//由于原配置文件要自己去写因此可以使用默认的配置文件作为配置文件</p>
+<p>//修改nginx配置文件，添加fastcgi支持</p>
+<p>vi /etc/nginx/nginx.conf</p>
+<pre><code>index index.php index.html index.htm;
+//加入index.php
+
+location ~ \.php$ {
+            root           /usr/share/nginx/html;
+            fastcgi_pass   127.0.0.1:9000;
+            fastcgi_index  index.php;
+            fastcgi_param  SCRIPT_FILENAME  /usr/share/nginx/html$fastcgi_script_name;
+            include        fastcgi_params;
+        }
+//将以上代码注释去掉，并修改成nginx默认路径
+</code></pre><p><strong>取消FastCGI server部分location的注释,并要注意fastcgi_param行的参数,/scripts$fastcgi_script_name改为$document_root$fastcgi_script_name,或者使用绝对路径，要不然浏览器访问，不能解析，会显示“ File not found.</strong></p>
+<p>10：配置php</p>
+<pre><code>//编辑文件php.ini，在文件末尾添加cgi.fix_pathinfo = 1
+[root@CentOS ~]# vi /etc/php.ini
+</code></pre><p>11：重启nginx php-fpm</p>
+<pre><code>service nginx restart
+service php-fpm restart
+　　
+</code></pre><p>12：建立info.php文件</p>
+<pre><code>vi /usr/share/nginx/html/info.php
+</code></pre><p>13：测试nginx是否解析php</p>
+<p>本地浏览器输入：192.168.1.105/info.php</p>
+<p>显示php界面 环境搭建成功</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Linux/" rel="tag"># Linux</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/04/30/GoAgent on Ubuntu14.10/" rel="next" title="GoAgent on Ubuntu14.10">
+                <i class="fa fa-chevron-left"></i> GoAgent on Ubuntu14.10
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/05/22/博客再次搬家/" rel="prev" title="博客再次搬家">
+                博客再次搬家 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview sidebar-panel sidebar-panel-active">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="Richie Jing" />
+          <p class="site-author-name" itemprop="name">Richie Jing</p>
+          <p class="site-description motion-element" itemprop="description">Window Server IT pro, love scripting.</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">81</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Richie Jing</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

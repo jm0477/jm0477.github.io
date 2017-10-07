@@ -1,0 +1,751 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Linux," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="Linux中任务计划分两种：  
+
+一次性的任务计划： at, batch
+
+周期性的任务计划 : crontab
+
+
+1. 一次性任务执行：
+命令：
+ at TIME   #回车
+
+
+at&amp;gt; ls /etc..   #在此命令提示符下 输入要执行的命令或脚本名称
+Ctrl+d # 提交任务
+TIME的格式如下：  
+模糊时间：  
+now+ # time-unit  例如： now + 3">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux任务计划详解">
+<meta property="og:url" content="http://yoursite.com/2015/05/29/Linux任务计划详解/index.html">
+<meta property="og:site_name" content="Richie's Personal Blog">
+<meta property="og:description" content="Linux中任务计划分两种：  
+
+一次性的任务计划： at, batch
+
+周期性的任务计划 : crontab
+
+
+1. 一次性任务执行：
+命令：
+ at TIME   #回车
+
+
+at&amp;gt; ls /etc..   #在此命令提示符下 输入要执行的命令或脚本名称
+Ctrl+d # 提交任务
+TIME的格式如下：  
+模糊时间：  
+now+ # time-unit  例如： now + 3">
+<meta property="og:updated_time" content="2017-01-29T02:01:28.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linux任务计划详解">
+<meta name="twitter:description" content="Linux中任务计划分两种：  
+
+一次性的任务计划： at, batch
+
+周期性的任务计划 : crontab
+
+
+1. 一次性任务执行：
+命令：
+ at TIME   #回车
+
+
+at&amp;gt; ls /etc..   #在此命令提示符下 输入要执行的命令或脚本名称
+Ctrl+d # 提交任务
+TIME的格式如下：  
+模糊时间：  
+now+ # time-unit  例如： now + 3">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2015/05/29/Linux任务计划详解/"/>
+
+
+
+
+
+  <title> Linux任务计划详解 | Richie's Personal Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Richie's Personal Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle">Life is short, do something meaningful!</p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/05/29/Linux任务计划详解/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Richie Jing">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar.gif">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Richie's Personal Blog">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Richie's Personal Blog" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Linux任务计划详解
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2015-05-29T14:24:33+08:00">
+                2015-05-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Linux中任务计划分两种：  </p>
+<ol>
+<li><p>一次性的任务计划： at, batch</p>
+</li>
+<li><p>周期性的任务计划 : crontab</p>
+</li>
+</ol>
+<p>1. 一次性任务执行：</p>
+<p>命令：</p>
+<pre><code> at TIME   #回车
+
+
+at&gt; ls /etc..   #在此命令提示符下 输入要执行的命令或脚本名称
+Ctrl+d # 提交任务
+</code></pre><p>TIME的格式如下：  </p>
+<p>模糊时间：  </p>
+<pre><code>now+ # time-unit  例如： now + 3min/hour/days/
+noon # 正午12点整
+teatime # 下午4点整
+midnight #半夜12点整
+tomorrow #明天的这个时间点
+hh:mm # 00-24:00-59，如果已经过了当前时间，将被排到明天此刻
+</code></pre><p>一次性任务队列查看：</p>
+<p>at -l 或者 atq  </p>
+<p>任务作业执行完成后，结果会通过邮件通知给作业提交者</p>
+<p>一次性任务撤销：</p>
+<pre><code>at -d # 
+atrm #
+</code></pre><p>batch: 功能和at相同，但无需指定时间，会自动选择系统资源较空闲时候执行指定的作业</p>
+<p>2. 周期性任务执行：</p>
+<p>cron: cron daemon, cron的守护进程，一直工作在后台  </p>
+<p>守护进程状态查看：  </p>
+<pre><code># service crond status
+</code></pre><p>如果状态为”is stopped”,则需要执行：  </p>
+<pre><code># service crond start
+# chkconfig crond on
+</code></pre><p>cron任务分两类：  </p>
+<p>a. 系统cron： 定义在/etc/crontab  </p>
+<p>b. 用户cron： 定义在/var/spool/cron目录， 每一个用户都有一个与用户名同名的文件，功能类似于/etc/crontab  </p>
+<p>每行定义一个独立的任务  </p>
+<p>/etc/crontab文件格式：</p>
+<pre><code>SHELL=/bin/bash
+PATH=/sbin:/bin:/usr/sbin:/usr/bin
+MAILTO=root
+HOME=/
+#环境变量
+# For details see man 4 crontabs
+# Example of job definition:
+# .---------------- minute (0 - 59)
+# |  .------------- hour (0 - 23)
+# |  |  .---------- day of month (1 - 31)
+# |  |  |  .------- month (1 - 12) OR jan,feb,mar,apr ...
+# |  |  |  |  .---- day of week (0 - 6) (Sunday=0 or 7) OR sun,mon,tue,wed,thu,fri,sat
+# |  |  |  |  |
+# *  *  *  *  * user-name command to be executed
+</code></pre><p>用户cron的每个作业由两部分组成</p>
+<p>1.时间</p>
+<p>分钟 小时 日 月 周几  </p>
+<p>2.命令  </p>
+<p>时间表示法：</p>
+<p>1. 每个时间位都应该使用其可用的有效取值范围的值</p>
+<pre><code>3 * * * * /bin/echo &quot;howdy&quot; #每个小时的第三分钟才会执行一次
+7 3 * * * /bin/echo &quot;howdy&quot; #每天的3点7分执行一次， 比hour小的单位上绝对不能有*
+7 6 5 * * /bin/echo &quot;howdy&quot; #每个月的5日6:07执行一个
+7 6 5 4 * /bin/echo &quot;howdy&quot; #每年的4月5日6:07执行一次
+1 9 * * 3 /bin/echo &quot;howdy&quot; #每周3的9:01执行 (月日和周是不同时使用的)
+</code></pre><p>2. 某个时间位上的* 表示对应时间为的所有有效取值</p>
+<p>3. */# 在对应的时间位的有效取值上每#一次</p>
+<pre><code>eg: */3 * * * * #每三分钟一次
+0 */3 * * * #每三小时一次
+</code></pre><p>4. 某个时间位上的连续区间：</p>
+<pre><code>10-50/3 * * * * #每小时的第10-50分钟执行一次
+</code></pre><p>5. 离散取值，可使用，分割</p>
+<pre><code>1 7,9,13 * * * #每天的7,9,13点1分执行一次
+</code></pre><p>丢弃邮件通知：</p>
+<p>输出重定向：</p>
+<pre><code>&gt; /dev/null #这里只是重定向标准重定向，错误内容还是会发邮件
+&amp;&gt; /dev/null 标准和错误重定向， 正确或错误都不会发送邮件
+&gt; /dev/null 2&gt;&amp;1 同上
+</code></pre><p>用户cron任务的定义方式：</p>
+<pre><code>crontab
+-l: 列出已经定义的所有任务
+-e: 打开编辑界面定义任务， 尽可能不要手动编辑/var/spool/crontab下的文件，-e选项是可以检查语法错误的
+-r: 移除所有任务
+</code></pre><p>管理员命令</p>
+<pre><code>-u USERNAME -e
+-u USERNAME -r
+-u USERNAME -l
+</code></pre><p>注意： 如果在crontab的用户命令中使用% 得转义： 不过，如果使用单引号引起来，也可不不用转义：</p>
+<pre><code>5 3 * * * /bin/touch /tmp/testfile-$(date +\%F-\%H-\%M-\%S)
+5 3 * * * /bin/touch /tmp/testfile-$(date + &apos;%F-%H-%M-%S&apos;)
+</code></pre><p>补充：</p>
+<p>实现秒级别的任务：  </p>
+<p>每10秒钟：  </p>
+<pre><code>* * * * * for i in {1..6};do echo &quot;howdy&quot;; sleep 10; done
+</code></pre><p>anacron： cron的补充机制  </p>
+<p>检查是否存在上一个有效周期内未曾执行的任务， 如果有， 在开机后的指定时间点执行一次  </p>
+<p>注意： 如果定义在crontab文件内的任务是脚本，则脚本中的各命令查找时遵循的是cron文件开头的PATH环境变量</p>
+<p>因此在命令行中测试无问题的脚本，在cron中未必</p>
+<p>解决方案： a.命令使用绝对路径</p>
+<p>b.脚本中定义PATH环境变量  </p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Linux/" rel="tag"># Linux</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/05/25/Linux变量引用及命令替换/" rel="next" title="Linux变量引用及命令替换">
+                <i class="fa fa-chevron-left"></i> Linux变量引用及命令替换
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/06/05/Linux LVM硬盘管理汇总/" rel="prev" title="Linux LVM硬盘管理汇总">
+                Linux LVM硬盘管理汇总 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview sidebar-panel sidebar-panel-active">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="Richie Jing" />
+          <p class="site-author-name" itemprop="name">Richie Jing</p>
+          <p class="site-description motion-element" itemprop="description">Window Server IT pro, love scripting.</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">81</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Richie Jing</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

@@ -1,0 +1,743 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Linux," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="1. yum简介2. yum组成结构3. yum配置使用4. yum命令详解5. yum源变量6. yum仓库创建7.进阶源码编译安装
+1. yum简介YUM: Yellowdog Updater Modifed, 是由Duke University团队修改Yellow Dog Linux的YellowDogUpdater开发而来的，是一个基于RPM包管理器的字符前端软件管理器(依赖于RPM包)。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="yum方式软件管理及进阶源码编译安装">
+<meta property="og:url" content="http://yoursite.com/2015/06/13/yum方式软件管理及进阶源码编译安装/index.html">
+<meta property="og:site_name" content="Richie's Personal Blog">
+<meta property="og:description" content="1. yum简介2. yum组成结构3. yum配置使用4. yum命令详解5. yum源变量6. yum仓库创建7.进阶源码编译安装
+1. yum简介YUM: Yellowdog Updater Modifed, 是由Duke University团队修改Yellow Dog Linux的YellowDogUpdater开发而来的，是一个基于RPM包管理器的字符前端软件管理器(依赖于RPM包)。">
+<meta property="og:updated_time" content="2017-01-29T02:01:28.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="yum方式软件管理及进阶源码编译安装">
+<meta name="twitter:description" content="1. yum简介2. yum组成结构3. yum配置使用4. yum命令详解5. yum源变量6. yum仓库创建7.进阶源码编译安装
+1. yum简介YUM: Yellowdog Updater Modifed, 是由Duke University团队修改Yellow Dog Linux的YellowDogUpdater开发而来的，是一个基于RPM包管理器的字符前端软件管理器(依赖于RPM包)。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2015/06/13/yum方式软件管理及进阶源码编译安装/"/>
+
+
+
+
+
+  <title> yum方式软件管理及进阶源码编译安装 | Richie's Personal Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Richie's Personal Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle">Life is short, do something meaningful!</p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/06/13/yum方式软件管理及进阶源码编译安装/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Richie Jing">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar.gif">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Richie's Personal Blog">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Richie's Personal Blog" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                yum方式软件管理及进阶源码编译安装
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2015-06-13T13:33:37+08:00">
+                2015-06-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>1. yum简介<br>2. yum组成结构<br>3. yum配置使用<br>4. yum命令详解<br>5. yum源变量<br>6. yum仓库创建<br>7.进阶源码编译安装</p>
+<p>1. yum简介<br>YUM: Yellowdog Updater Modifed, 是由Duke University团队修改Yellow Dog Linux的Yellow<br>Dog<br>Updater开发而来的，是一个基于RPM包管理器的字符前端软件管理器(依赖于RPM包)。能够从指定的服务器自动下载RPM包并且安装，可以处理RPM包的依赖关系，并且一次安装所有依赖的软件包，无须繁琐的一次次下载、安装。被Fedora、Red<br>Hat Enterprise Linux、CentOS所使用。</p>
+<p>2. yum的组成结构</p>
+<p>简单的说： YUM就是一个RPM包管理工具，而且YUM是C/S结构，服务端就是一个文件服务器，都是rpm包；而YUM客户端可以配置多个YUM服务端来使用。</p>
+<p>2.1 YUM服务端</p>
+<p>yum repository: 称之为yum仓库，存在于yum服务器端，分成两部分：<br>a. 仓库数据：<br>各个数据包<br>b. 元数据(meta data)<br>数据文件信息在centos5是xml格式，在centos6,7上用的是sqlite，基于文件来实现关系型数据库<br>元数据包括：<br>包名，版本信息，各包所包含的文件列表，依赖关系，包分组信息<br>我们可以使用createrepo命令来给rpm包创建仓库</p>
+<p>yum仓库 主要有以下几类：<br>base库 #基础库<br>update库 #更新版本库<br>extra库 #格外库<br>epel库 #fedora维护的库</p>
+<p>#如果某软件base库里有，update库里也有，则应该使用update库中的包，因为update库中是更新的版本<br>以上库的优先顺序应为： base &gt; update &gt; extra &gt; epel</p>
+<p>yum机制：<br>要想确保YUM正常工作，要满足以下几点：<br>2.1.1 确保有yum repo可用<br>rpm包的文件服务器中， repodta目录所在的父目录，就是一个可用仓库<br>例如：<a href="http://mirrors.sohu.com/centos/6/os/x86_64/" target="_blank" rel="external">http://mirrors.sohu.com/centos/6/os/x86_64/</a> 目录下有repodate目录的就可认定为一个yum仓库</p>
+<p>yum仓库可以通过以下三种方式共享：</p>
+<p>ftp: <a href="ftp://server/path/to/repository" target="_blank" rel="external">ftp://server/path/to/repository</a><br>http <a href="http://server/path/to/repository" target="_blank" rel="external">http://server/path/to/repository</a><br>nfs nfs://server/nfs_path<br>file file:///path/to/repository #本地文件系统，挂载光盘后直接就可以用 file:///media/cdrom 即可</p>
+<p>3. yum配置使用</p>
+<p>在客户端上必须要提供repo配置文件，指明仓库访问路径及各种属性信息</p>
+<p>主配置文件(中心配置文件)： /etc/yum.conf (此配置文件的参数作用可以通过 man yum.conf查看)， 内容如下：</p>
+<p>[main]<br>cachedir=/var/cache/yum/$basearch/$releasever #缓存目录<br>keepcache=0 #是否保存缓存数据？ 0 不保存<br>debuglevel=2 #debug信息等级<br>logfile=/var/log/yum.log #yum的日志信息保存地址<br>exactarch=1 #exact arch match? 是否要精确匹配平台？<br>obsoletes=1 #是否要检查过期仓库？<br>gpgcheck=1<br>plugins=1<br>installonly_limit=5<br>bugtracker_url=<a href="http://bugs.centos.org/set_project.php?project_id=19&amp;ref=http://bugs.centos.org/bug_report_page.php?category=yum" target="_blank" rel="external">http://bugs.centos.org/set_project.php?project_id=19&amp;ref;=http://bugs.centos.org/bug_report_page.php?category=yum</a><br>distroverpkg=centos-release</p>
+<h1 id="This-is-the-default-if-you-make-this-bigger-yum-won’t-see-if-the-metadata"><a href="#This-is-the-default-if-you-make-this-bigger-yum-won’t-see-if-the-metadata" class="headerlink" title="This is the default, if you make this bigger yum won’t see if the metadata"></a>This is the default, if you make this bigger yum won’t see if the metadata</h1><h1 id="is-newer-on-the-remote-and-so-you’ll-“gain”-the-bandwidth-of-not-having-to"><a href="#is-newer-on-the-remote-and-so-you’ll-“gain”-the-bandwidth-of-not-having-to" class="headerlink" title="is newer on the remote and so you’ll “gain” the bandwidth of not having to"></a>is newer on the remote and so you’ll “gain” the bandwidth of not having to</h1><h1 id="download-the-new-metadata-and-“pay”-for-it-by-yum-not-having-correct"><a href="#download-the-new-metadata-and-“pay”-for-it-by-yum-not-having-correct" class="headerlink" title="download the new metadata and “pay” for it by yum not having correct"></a>download the new metadata and “pay” for it by yum not having correct</h1><h1 id="information"><a href="#information" class="headerlink" title="information."></a>information.</h1><h1 id="It-is-esp-important-to-have-correct-metadata-for-distributions-like"><a href="#It-is-esp-important-to-have-correct-metadata-for-distributions-like" class="headerlink" title="It is esp. important, to have correct metadata, for distributions like"></a>It is esp. important, to have correct metadata, for distributions like</h1><h1 id="Fedora-which-don’t-keep-old-packages-around-If-you-don’t-like-this-checking"><a href="#Fedora-which-don’t-keep-old-packages-around-If-you-don’t-like-this-checking" class="headerlink" title="Fedora which don’t keep old packages around. If you don’t like this checking"></a>Fedora which don’t keep old packages around. If you don’t like this checking</h1><h1 id="interupting-your-command-line-usage-it’s-much-better-to-have-something"><a href="#interupting-your-command-line-usage-it’s-much-better-to-have-something" class="headerlink" title="interupting your command line usage, it’s much better to have something"></a>interupting your command line usage, it’s much better to have something</h1><h1 id="manually-check-the-metadata-once-an-hour-yum-updatesd-will-do-this"><a href="#manually-check-the-metadata-once-an-hour-yum-updatesd-will-do-this" class="headerlink" title="manually check the metadata once an hour (yum-updatesd will do this)."></a>manually check the metadata once an hour (yum-updatesd will do this).</h1><h1 id="metadata-expire-90m"><a href="#metadata-expire-90m" class="headerlink" title="metadata_expire=90m"></a>metadata_expire=90m</h1><h1 id="PUT-YOUR-REPOS-HERE-OR-IN-separate-files-named-file-repo"><a href="#PUT-YOUR-REPOS-HERE-OR-IN-separate-files-named-file-repo" class="headerlink" title="PUT YOUR REPOS HERE OR IN separate files named file.repo"></a>PUT YOUR REPOS HERE OR IN separate files named file.repo</h1><h1 id="in-etc-yum-repos-d"><a href="#in-etc-yum-repos-d" class="headerlink" title="in /etc/yum.repos.d"></a>in /etc/yum.repos.d</h1><p>一个或多个相关仓库的配置信息可保存在一个文件，文件名都以.repo结尾，存放在/etc/yum.repos.d 目录下</p>
+<p>在.repo文件定义一个yum repo指向的格式：</p>
+<p>[REPOID] #这个REPOID可以自己设定任意字符<br>name=Some name for this repository #此行等号两侧不能有空格，右侧可以加空格，不写此字段使用yum会报warning<br>baseurl=file:///media/cdrom #baseurl可以有多个，用来指定真正仓库的所在地<br>ftp: <a href="ftp://server/path/to/repository" target="_blank" rel="external">ftp://server/path/to/repository</a><br>http <a href="http://server/path/to/repository" target="_blank" rel="external">http://server/path/to/repository</a><br>nfs nfs://server/nfs_path  </p>
+<p>#多个baseurl 必须按照上面格式书写，第二个baserul不能出现在行首<br>enabled={0,1} #1为启用此repo<br>gpgcheck={0,1} #是否检查GPG(GNU Private Guard)，一种密钥方式签名。<br>gpgkey=URL #当配置gpgcheck选项时，要加上gpgkey来验证<br>例如：gpgkey=file:///media/cdrom/GPG-RPM-KEY-centos-6<br>mirrorlist=URL to a file #这个文件指向多个baseurl，不定义baseurl的时候可以用这个指定多个仓库<br>cost={1..n} #默认值为1000， 指定访问此仓库的开销</p>
+<p>例如在yum客户端创建一个新的repo，首先定位到/etc/yum.repos.d下创建一个文件 163.repo<br>内容如下：</p>
+<p>[163]<br>name=CentOS 6 from 163 mirror<br>baseurl=<a href="http://mirrors.163.com/centos/6.6/os/x86_64/" target="_blank" rel="external">http://mirrors.163.com/centos/6.6/os/x86_64/</a> #记得检查该目录是否有 repodata目录<br>enabled=1<br>gpgcheck=0</p>
+<p>然后可以使用命令 yum repolist 查看到此repo配置</p>
+<p>4. yum命令详解</p>
+<p>这里的yum命令都是指在客户端上使用的，包括列表，清理缓存，安装/重新安装/降级安装/卸载，查询等命令。</p>
+<p>4.1 列出所有可用repo<br>yum repolist {enabled|disabled|all} #列出{已经启用的|已禁用的|所有的}可用的repo</p>
+<p>4.2 列出rpm包<br>yum list {all|installed|available} # 列出{所有|已安装|未安装但repo内有的}</p>
+<p>4.3 查看包的描述信息<br>yum info package_name</p>
+<p>4.4 列出所有的包组信息<br>yum grouplist</p>
+<p>4.5 显示包组的信息， 指定某个包组的程序包列表和功能<br>yum groupinfo “GROUP NAME”<br>例如： yum groupinfo “Server Platform Development”</p>
+<p>4.6 清理缓存<br>yum clean {all|packages|metadata|expire-cache|rpmdb|plugins}</p>
+<p>#清理{所有|特定rpm包|元数据|过期缓存|repo数据库|插件}的缓存</p>
+<p>只有yum clean all比较常用，其他用的到的在来翻看笔记吧</p>
+<p>#注，清理缓存并不会删除目录结构，只是结构内的数据被清除<br>可以用 tree /var/cache/yum来对比 清理缓存后的文件列表对比</p>
+<p>4.7 安装程序包<br>yum install package_name</p>
+<p>重新安装程序包<br>yum reinstall package_name</p>
+<p>4.8 升级程序<br>检查可用的升级包<br>yum check-update #并不会执行安装<br>升级包<br>yum update package_name<br>例如： 我们要升级一个程序 x-1.3.1<br>当前repo中存在x-1.3.2, x-1.3.3, x-2.0.1 三个版本，我们只想安装特定的x-1.3.2<br>而直接运行 yum update x ，会直接将x升级到最新版本 x-2.0.1<br>这时候，我们可以加上rpm包的版本，指定升级版本</p>
+<p>升级到特定版本<br>yum update package_name-version</p>
+<p>降级包<br>yum downgrade package_name</p>
+<p>4.9 卸载包<br>yum remove|erase package_name  </p>
+<p>#如果卸载一个软件被其他软件依赖， 那会连同所用的依赖包一同卸载掉。</p>
+<p>4.10 查询某配置文件是由哪个包生成的？<br>yum whatprovides | provides /path/to/somefile  </p>
+<p>#whatprovides和provides两个参数都可以</p>
+<p>4.11 安装包组<br>yum groupinstall “GROUP NAME” #可以用yum gourplist来查看都支持哪些包组</p>
+<p>4.12 卸载包组<br>yum groupremove “GROUP NAME”</p>
+<p>4.1.3 安装仓库外rpm包</p>
+<p>假设： 从其他处获得一个rpm包， 如果此包依赖于其他包(在仓库中)， 如何安装？<br>如果只是单次安装需要：<br>CentOS 5:<br>yum install /path/to/package_file</p>
+<p>CentOS 6,7:<br>yum localinstall /path/to/package_fiel</p>
+<p>5. yum源变量</p>
+<p>在使用在线的repo源的时候， 客户端yum配置文件中中可以使用4个变量</p>
+<p>$releasever： 程序的版本 #可以根据系统来替换成相应的主版本号，5,6,7，而主版本号下的连接是当前发行版的最新版本5.6,6.5,7.1等<br>$arch: 系统架构<br>$basearch: 系统基本架构，如i686, i586等的基本架构为i386<br>$uuid:<br>$YUM0-9： 在系统中定义的环境变量， 可以在yum中使用：</p>
+<p>ps:<br>实际环境中，baseurl中常用$releasever和$basearch来替换本地架构和linux版本来让仓库的配置文件更具有通用性，让不同的平台版本可以使用同一个配置文件。</p>
+<p>5.1 获取yum源变量值</p>
+<p>获取当前系统相应变量替换结果的办法：<br>-bash-4.1# python<br>Python 2.6.6 (r266:84292, Jan 22 2014, 09:42:36)<br>[GCC 4.4.7 20120313 (Red Hat 4.4.7-4)] on linux2  </p>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>import yum,pprint<br>yb = yum.YumBase()<br>pprint.pprint(yb.conf.yumvar,width=1)<br>Loaded plugins: fastestmirror, refresh-packagekit<br>{‘arch’: ‘ia32e’,<br>‘basearch’: ‘x86_64’,<br>‘infra’: ‘stock’,<br>‘releasever’: ‘6’,<br>‘uuid’: ‘54298ec4-d059-4bfe-a967-cce66eb95513’}<br>quit()</p>
+</blockquote>
+</blockquote>
+</blockquote>
+<p>6. yum仓库创建</p>
+<p>yum仓库可以分为本地仓库和在线仓库两种：</p>
+<p>6.1 自建本地yum仓库：<br>1. 如何自建基于光盘镜像的yum repo<br>挂载光盘<br>mount /dev/cdrom /media/cdrom<br>在/etc/yum.repo.d/下创建一个.repo文件<br>内容为：<br>[base]<br>name=Local Media<br>baseurl=file:///media/cdrom<br>pgpcheck=0<br>enabled=1</p>
+<p>2. 自简提供yum仓库的中心服务器<br>ftp, http, nfs 三种常用的文件服务器</p>
+<p>以http为例：，步骤：<br>1. 安装httpd程序  </p>
+<p>#rpm -ivh http-x-x-x-x.rpm<br>1.2 启动httpd服务  </p>
+<p>#service httpd start  </p>
+<p>#chkconfig httpd on #centos7 不适用</p>
+<p>2. httpd的文档根目录为/var/www/html<br>创建子目录，存放某相关的所有rpm包</p>
+<p>3. 为仓库生成元数据文件，以使其能够作为仓库使用<br>3.1 安装 craeterepo<br>rpm -ivh createrepo-xxx.xxx.xxx.rpm<br>或者  </p>
+<p>#yum install createrepo</p>
+<p>3.2 对rpm包目录createrepo：  </p>
+<p>#createrepo /var/www/html/zabbix  </p>
+<h1 id="createrepo-var-www-html-zabbix"><a href="#createrepo-var-www-html-zabbix" class="headerlink" title="createrepo /var/www/html/zabbix"></a>createrepo /var/www/html/zabbix</h1><p>Spawning worker 0 with 16 pkgs<br>Workers Finished<br>Gathering worker results</p>
+<p>Saving Primary metadata<br>Saving file lists metadata<br>Saving other metadata<br>Generating sqlite DBs<br>Sqlite DBs complete  </p>
+<p>则该目录下会自动生成一个repodata目录，该目录/var/www/html/zabbix就可以当repo用了</p>
+<p>4. 配置yum客户端<br>[zabbix]<br>name=zabbix repo<br>baseurl=<a href="http://192.168.229.141" target="_blank" rel="external">http://192.168.229.141</a><br>gpgcheck=0<br>enabled=1</p>
+<p>然后就可以使用这个repo了</p>
+<p>7.进阶源码编译安装</p>
+<p>7.1 编译安装，依赖于开发环境<br>程序源码：<br>c/c++ 底层，无跨平台能力<br>perl<br>python</p>
+<p>别人制作好的rpm包，都是编译过的，而当源码包的功能有20个，<br>主包：6个功能<br>分包1: 2个功能<br>分包2： 4个功能</p>
+<p>也就是说别人会根据需求订制功能，编译后rpm包功能会比源码功能少，并且也会比源码包慢几个版本<br>可能出现你需要的功能，在别人编译好的rpm上没办法使用，这时候就需要我们自己来根据源代码来自己编译安装</p>
+<p>开源的源代码有如下两个方式来提供：</p>
+<p>1.开源应用程序：<br>自建站点： #一般都是比较大型的项目会有自己的站点<br>apache, ASF<br>mysql<br>drbd<br>2. 代码托管： #一些中小型项目的源代码一般都使用代码托管的方式，寄存在以下的代码托管网站<br>Sourceforge<br>github.com<br>code.google.com</p>
+<p>tips： 编译安装的缺点是： 无法自动卸载安装的文件，所以习惯把编译安装的软件放在一个目录下，便于日后升级卸载</p>
+<p>7.2 编译工具：gcc<br>gnu c complier 只能用来编译c程序<br>gcc-c++ 用来编译c++程序<br>使用 rpm -qa| grep gcc 可以看到本机有很多种针对不同语言的编译工具，编译是很耗时的</p>
+<p>7.3 源代码的组织格式：<br>多文件：<br>文件中的代码有依赖关系<br>项目管理工具：<br>GNU make(gcc) 定义好多文件之间的编译关系，处理多文件内源码的依赖关系</p>
+<p>项目: 50文件<br>项目的制作者： 利用make工具，为make提供一个配置文件<br>make不是编译工具，是编译的管理工具</p>
+<p>autoconf: 生成编译环境检查(检查开发环境是否满足编译需求)及编译功能配置(选择源码内的功能)脚本<br>生成configure<br>当configure脚本执行的时候，会结合automake工具生成的Makefile.in来生成makefile</p>
+<p>automake： 生成一个Makefile.in –&gt; makefile</p>
+<p>7.4 编译源程序的步骤：  </p>
+<h1 id="tar-xf-testapp-version-tar-xz-bz-gz"><a href="#tar-xf-testapp-version-tar-xz-bz-gz" class="headerlink" title="tar xf testapp-version.tar.{xz|bz|gz}"></a>tar xf testapp-version.tar.{xz|bz|gz}</h1><h1 id="cd-testapp-version"><a href="#cd-testapp-version" class="headerlink" title="cd testapp-version"></a>cd testapp-version</h1><h1 id="configure"><a href="#configure" class="headerlink" title="./configure"></a>./configure</h1><p>还需要通过许多选项指定编译特性，选取功能  </p>
+<h1 id="make"><a href="#make" class="headerlink" title="make"></a>make</h1><h1 id="make-install"><a href="#make-install" class="headerlink" title="make install"></a>make install</h1><p>./configure 脚本的使用：<br>1. 获取帮助<br>./configure –help #基于每个项目内的配置选项是不同的，需要查看</p>
+<p>2. 通用一些选项<br>安装路径相关：<br>--prefix=/path/to/somewhere: 指定安装路径<br>--sysconfdir=/path/to/somewhere: 指定配置文件安装路径的， 路径应该为/etc/下某个目录</p>
+<p>指定启用/禁用的特性<br>--enable-FEATURE 例如 –enable-fpm ,但是启用一个功能，就会依赖另外的开发环境包<br>--disable-FEATURE 例如 –disable-socket</p>
+<p>指定所依赖的功能、程序或文件<br>--with-FUNCTION[=/path/to/somewhere]<br>--without-FUNCTION</p>
+<p>7.5 安装后的配置：</p>
+<p>7.5.1 程序运行及维护：</p>
+<p>1. 让二进制程序直接运行，而无需输入路径  </p>
+<p>#vim /etc/profile.d/APPNAME.sh<br>export PATH=$PATH:/path/to/somewhere</p>
+<p>2. 导出手册页：<br>编辑/etc/man.config 配置文件，添加一项MANPATH，路径为新安装的程序的man目录<br>或者  </p>
+<p>#man -M /path/to/somewhere KEYWORD 就可以找KEYWORD的帮助手册了</p>
+<p>3. 自己编写/etc/init.d/的启动脚本</p>
+<p>ps: 如果只是为了编译安装，并运行软件，则到此就可以结束了。  </p>
+<h1 id="下面的步骤是为了解决其他应用程序依赖开发环境，和针对编译安装程序的二次开发准备环境使用的。"><a href="#下面的步骤是为了解决其他应用程序依赖开发环境，和针对编译安装程序的二次开发准备环境使用的。" class="headerlink" title="下面的步骤是为了解决其他应用程序依赖开发环境，和针对编译安装程序的二次开发准备环境使用的。  "></a>下面的步骤是为了解决其他应用程序依赖开发环境，和针对编译安装程序的二次开发准备环境使用的。  </h1><p>7.5.2 程序开发： 如果其他应用程序依赖此程序的开发环境，或针对此程序做二次开发<br>1. 导出库文件<br>第一步： 指定让系统搜索定制的路径<br>编辑/etc/ld.so.conf.d/APPNAME.conf<br>一行一个库文件路径</p>
+<p>例如： vim /etc/ld.so.conf.d/nginx.conf  </p>
+<p>#/usr/local/ngxin/lib  </p>
+<p>第二步：触发系统重新搜索所有的库文件并生成缓存  </p>
+<p>#ldconfig<br>-v 显示过程</p>
+<p>2. 导出头文件<br>/usr/local/ngxin/include</p>
+<p>系统找头文件的路径是 /usr/include</p>
+<p>导出方式： 创建链接进行<br>ln -sv /usr/local/ngxin/include /usr/include/nginx</p>
+<p>启动程序得自己写，在/etc/init.d/，不是不能启动，自己写好，就可以和其他软件用同一种风格来运行了。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Linux/" rel="tag"># Linux</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/06/12/RPM包管理/" rel="next" title="RPM包管理">
+                <i class="fa fa-chevron-left"></i> RPM包管理
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/06/23/Xmanager无法弹出远程界面报错：Could not open display because no X server is running 解决办法/" rel="prev" title="Xmanager无法弹出远程界面报错：Could not open display because no X server is running 解决办法">
+                Xmanager无法弹出远程界面报错：Could not open display because no X server is running 解决办法 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="Richie Jing" />
+          <p class="site-author-name" itemprop="name">Richie Jing</p>
+          <p class="site-description motion-element" itemprop="description">Window Server IT pro, love scripting.</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">81</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#This-is-the-default-if-you-make-this-bigger-yum-won’t-see-if-the-metadata"><span class="nav-number">1.</span> <span class="nav-text">This is the default, if you make this bigger yum won’t see if the metadata</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#is-newer-on-the-remote-and-so-you’ll-“gain”-the-bandwidth-of-not-having-to"><span class="nav-number">2.</span> <span class="nav-text">is newer on the remote and so you’ll “gain” the bandwidth of not having to</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#download-the-new-metadata-and-“pay”-for-it-by-yum-not-having-correct"><span class="nav-number">3.</span> <span class="nav-text">download the new metadata and “pay” for it by yum not having correct</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#information"><span class="nav-number">4.</span> <span class="nav-text">information.</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#It-is-esp-important-to-have-correct-metadata-for-distributions-like"><span class="nav-number">5.</span> <span class="nav-text">It is esp. important, to have correct metadata, for distributions like</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Fedora-which-don’t-keep-old-packages-around-If-you-don’t-like-this-checking"><span class="nav-number">6.</span> <span class="nav-text">Fedora which don’t keep old packages around. If you don’t like this checking</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#interupting-your-command-line-usage-it’s-much-better-to-have-something"><span class="nav-number">7.</span> <span class="nav-text">interupting your command line usage, it’s much better to have something</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#manually-check-the-metadata-once-an-hour-yum-updatesd-will-do-this"><span class="nav-number">8.</span> <span class="nav-text">manually check the metadata once an hour (yum-updatesd will do this).</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#metadata-expire-90m"><span class="nav-number">9.</span> <span class="nav-text">metadata_expire=90m</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#PUT-YOUR-REPOS-HERE-OR-IN-separate-files-named-file-repo"><span class="nav-number">10.</span> <span class="nav-text">PUT YOUR REPOS HERE OR IN separate files named file.repo</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#in-etc-yum-repos-d"><span class="nav-number">11.</span> <span class="nav-text">in /etc/yum.repos.d</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#createrepo-var-www-html-zabbix"><span class="nav-number">12.</span> <span class="nav-text">createrepo /var/www/html/zabbix</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#tar-xf-testapp-version-tar-xz-bz-gz"><span class="nav-number">13.</span> <span class="nav-text">tar xf testapp-version.tar.{xz|bz|gz}</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#cd-testapp-version"><span class="nav-number">14.</span> <span class="nav-text">cd testapp-version</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#configure"><span class="nav-number">15.</span> <span class="nav-text">./configure</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#make"><span class="nav-number">16.</span> <span class="nav-text">make</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#make-install"><span class="nav-number">17.</span> <span class="nav-text">make install</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#下面的步骤是为了解决其他应用程序依赖开发环境，和针对编译安装程序的二次开发准备环境使用的。"><span class="nav-number">18.</span> <span class="nav-text">下面的步骤是为了解决其他应用程序依赖开发环境，和针对编译安装程序的二次开发准备环境使用的。  </span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Richie Jing</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

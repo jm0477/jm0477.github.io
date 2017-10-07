@@ -1,0 +1,754 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Linux," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="目录：1. RPM简介2. RPM包获取方式3. RPM包安装4. RPM包卸载5. RPM包升级6. RPM包查询7. RPM包校验8. RPM数据库重建
+1.简介：
+RPM软件包管理器， RPM (原Red Hat Package Manager)，现在被很多Linux发行版使用，现在就叫 RPM PackageManager是一种二进制包管理器，可以完成软件安装、卸载、升级、查询、校验等操作">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RPM包管理">
+<meta property="og:url" content="http://yoursite.com/2015/06/12/RPM包管理/index.html">
+<meta property="og:site_name" content="Richie's Personal Blog">
+<meta property="og:description" content="目录：1. RPM简介2. RPM包获取方式3. RPM包安装4. RPM包卸载5. RPM包升级6. RPM包查询7. RPM包校验8. RPM数据库重建
+1.简介：
+RPM软件包管理器， RPM (原Red Hat Package Manager)，现在被很多Linux发行版使用，现在就叫 RPM PackageManager是一种二进制包管理器，可以完成软件安装、卸载、升级、查询、校验等操作">
+<meta property="og:updated_time" content="2017-01-29T02:01:28.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="RPM包管理">
+<meta name="twitter:description" content="目录：1. RPM简介2. RPM包获取方式3. RPM包安装4. RPM包卸载5. RPM包升级6. RPM包查询7. RPM包校验8. RPM数据库重建
+1.简介：
+RPM软件包管理器， RPM (原Red Hat Package Manager)，现在被很多Linux发行版使用，现在就叫 RPM PackageManager是一种二进制包管理器，可以完成软件安装、卸载、升级、查询、校验等操作">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2015/06/12/RPM包管理/"/>
+
+
+
+
+
+  <title> RPM包管理 | Richie's Personal Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Richie's Personal Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle">Life is short, do something meaningful!</p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/06/12/RPM包管理/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Richie Jing">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar.gif">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Richie's Personal Blog">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Richie's Personal Blog" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                RPM包管理
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2015-06-12T00:02:00+08:00">
+                2015-06-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>目录：<br>1. RPM简介<br>2. RPM包获取方式<br>3. RPM包安装<br>4. RPM包卸载<br>5. RPM包升级<br>6. RPM包查询<br>7. RPM包校验<br>8. RPM数据库重建</p>
+<p>1.简介：</p>
+<p>RPM软件包管理器， RPM (原Red Hat Package Manager)，现在被很多Linux发行版使用，现在就叫 RPM Package<br>Manager<br>是一种二进制包管理器，可以完成软件安装、卸载、升级、查询、校验等操作。</p>
+<p>2. RPM包获取方式</p>
+<p>获取rpm包的途径：</p>
+<p>众所周知，网上鱼龙混杂，随意下载到的rpm包可能会被人恶意篡改，而对系统安全产生威胁，我们需要找到一些靠谱的方式来找到权威的rpm包提供者，下面三种方式比较靠谱：</p>
+<p>2.1 发行的光盘或站点服务器：</p>
+<p>镜像：<br><a href="http://mirrors.163.com" target="_blank" rel="external">http://mirrors.163.com</a><br><a href="http://mirrors.sohu.com" target="_blank" rel="external">http://mirrors.sohu.com</a><br><a href="http://mirrors.aliyun.com" target="_blank" rel="external">http://mirrors.aliyun.com</a><br>…<br>很多高校也建立了开源镜像站点，可以供我们使用。</p>
+<p>2.2 项目的官网</p>
+<p>例如：<a href="http://www.zsh.org/" target="_blank" rel="external">http://www.zsh.org/</a><br>从官网可以看到源代码，并且可以下载到rpm包</p>
+<p>2.3 很多第三方机构或个人制作并公开发布许多rpm包,例如：</p>
+<p><a href="http://rpmfind.net" target="_blank" rel="external">http://rpmfind.net</a></p>
+<p><a href="http://rpm.pbone.net" target="_blank" rel="external">http://rpm.pbone.net</a></p>
+<p>一个可靠的途径： EPEL(Extra Packages for Enterprise Linux)</p>
+<p>是由Fedora community来维护的，这里不详细叙述使用EPEL<br>使用文档可以参见： <a href="http://fedoraproject.org/wiki/EPEL" target="_blank" rel="external">http://fedoraproject.org/wiki/EPEL</a></p>
+<p>3. RPM包安装</p>
+<p>当我们拿到来源可靠的RPM包后，接下来就是安装RPM包了，RPM的安装依靠rpm命令完成，语法如下：</p>
+<p>rpm [option] /path/to/package_file #这里要指定RPM包的路径  </p>
+<p>3.1 -i: install，安装rpm包<br>当我们仅用 rpm -i 来安装某包时候，比如我们安装zsh包<br>前提： 我们使用光盘作为rpm包源 先用：<br>mount /dev/cdrom /media/cdrom #将光盘挂载到/media/cdrom下<br>ls /media/cdrom #看下光盘目录结构：</p>
+<p>-r–r–r–. 2 root root 14 Nov 29 2013 CentOS_BuildTag<br>dr-xr-xr-x. 3 root root 2048 Nov 29 2013 EFI<br>-r–r–r–. 2 root root 212 Nov 27 2013 EULA<br>-r–r–r–. 2 root root 18009 Nov 27 2013 GPL<br>dr-xr-xr-x. 3 root root 2048 Nov 29 2013 images<br>dr-xr-xr-x. 2 root root 2048 Nov 29 2013 isolinux<br>dr-xr-xr-x. 2 root root 655360 Nov 29 2013 Packages<br>-r–r–r–. 2 root root 1354 Nov 27 2013 RELEASE-NOTES-en-US.html<br>dr-xr-xr-x. 2 root root 4096 Nov 29 2013 repodata<br>-r–r–r–. 2 root root 1706 Nov 27 2013 RPM-GPG-KEY-CentOS-6<br>-r–r–r–. 2 root root 1730 Nov 27 2013 RPM-GPG-KEY-CentOS-Debug-6<br>-r–r–r–. 2 root root 1730 Nov 27 2013 RPM-GPG-KEY-CentOS-Security-6<br>-r–r–r–. 2 root root 1734 Nov 27 2013 RPM-GPG-KEY-CentOS-Testing-6<br>-r–r–r–. 1 root root 3380 Nov 29 2013 TRANS.TBL</p>
+<p>其中有一个目录为Packages，<br>这个目录下包含了所有的rpm包，我们来测试安装位于/media/cdrom/Packages/zsh-4.3.10-7.el6.x86_64.rpm</p>
+<p>rpm -i /media/cdrom/Packages/zsh-4.3.10-7.el6.x86_64.rpm<br>你会发现什么都没提示就完成了，如果在运行一次就会提示你已经安装了  </p>
+<h1 id="rpm-i-media-cdrom-Packages-zsh-4-3-10-7-el6-x86-64-rpm"><a href="#rpm-i-media-cdrom-Packages-zsh-4-3-10-7-el6-x86-64-rpm" class="headerlink" title="rpm -i /media/cdrom/Packages/zsh-4.3.10-7.el6.x86_64.rpm"></a>rpm -i /media/cdrom/Packages/zsh-4.3.10-7.el6.x86_64.rpm</h1><p>package zsh-4.3.10-7.el6.x86_64 is already installed</p>
+<p>3.2 -v： 显示安装信息， -v需要结合-i来使用，如-iv，测试安装zsh：</p>
+<h1 id="rpm-iv-media-cdrom-Packages-zsh-4-3-10-7-el6-x86-64-rpm"><a href="#rpm-iv-media-cdrom-Packages-zsh-4-3-10-7-el6-x86-64-rpm" class="headerlink" title="rpm -iv /media/cdrom/Packages/zsh-4.3.10-7.el6.x86_64.rpm"></a>rpm -iv /media/cdrom/Packages/zsh-4.3.10-7.el6.x86_64.rpm</h1><p>Preparing packages for installation…<br>zsh-4.3.10-7.el6<br>这次安装会提示你准备信息，和安装的名称。</p>
+<p>3.3 -vv: 显示更详细的安装信息<br>详细到每一个文件的创建过程，以及改变记录，输出更多的debug信息</p>
+<h1 id="rpm-ivv-media-cdrom-Packages-zsh-4-3-10-7-el6-x86-64-rpm"><a href="#rpm-ivv-media-cdrom-Packages-zsh-4-3-10-7-el6-x86-64-rpm" class="headerlink" title="rpm -ivv /media/cdrom/Packages/zsh-4.3.10-7.el6.x86_64.rpm"></a>rpm -ivv /media/cdrom/Packages/zsh-4.3.10-7.el6.x86_64.rpm</h1><p>你会看到很多debug信息。</p>
+<p>3.4 -h: hash，显示软件解压缩过程，例如：</p>
+<h1 id="rpm-ih-zsh-4-3-10-7-el6-x86-64-rpm"><a href="#rpm-ih-zsh-4-3-10-7-el6-x86-64-rpm" class="headerlink" title="rpm -ih zsh-4.3.10-7.el6.x86_64.rpm"></a>rpm -ih zsh-4.3.10-7.el6.x86_64.rpm</h1><p>########################################### [100%]  </p>
+<p>########################################### [100%]</p>
+<p>会显示解压缩过程</p>
+<p>3.5 组合安装选项 -ivh<br>我们用的最多的还是rpm -ivh 这种组合选项，能够显示出足够多信息，例如：</p>
+<h1 id="rpm-ivh-zsh-4-3-10-7-el6-x86-64-rpm"><a href="#rpm-ivh-zsh-4-3-10-7-el6-x86-64-rpm" class="headerlink" title="rpm -ivh zsh-4.3.10-7.el6.x86_64.rpm"></a>rpm -ivh zsh-4.3.10-7.el6.x86_64.rpm</h1><p>Preparing… ########################################### [100%]<br>1:zsh ########################################### [100%]</p>
+<p>3.6 –test:<br>仅测试安装，并不真正执行安装，如果我们运行一个没有对其他包有依赖的rpm包，如下：</p>
+<h1 id="rpm-ivh-–test-zsh-4-3-10-7-el6-x86-64-rpm"><a href="#rpm-ivh-–test-zsh-4-3-10-7-el6-x86-64-rpm" class="headerlink" title="rpm -ivh –test zsh-4.3.10-7.el6.x86_64.rpm"></a>rpm -ivh –test zsh-4.3.10-7.el6.x86_64.rpm</h1><p>Preparing… ########################################### [100%]</p>
+<p>只会显示准备安装，但是没有真正的安装，如果有依赖关系，则会报错，给我们一种方式来测试依赖关系：</p>
+<p>3.6 解决安装依赖问题<br>关于安装过程中，如果我们安装B包，但是B包依赖于A包，我们安装的时候就会出现问题，如果我们用上面的安装命令来安装php：</p>
+<h1 id="rpm-ivh-php-5-3-3-26-el6-x86-64-rpm"><a href="#rpm-ivh-php-5-3-3-26-el6-x86-64-rpm" class="headerlink" title="rpm -ivh php-5.3.3-26.el6.x86_64.rpm"></a>rpm -ivh php-5.3.3-26.el6.x86_64.rpm</h1><p>error: Failed dependencies:<br>php-cli(x86-64) = 5.3.3-26.el6 is needed by php-5.3.3-26.el6.x86_64<br>php-common(x86-64) = 5.3.3-26.el6 is needed by php-5.3.3-26.el6.x86_64</p>
+<p>就会出现我们安装php，但是php依赖php-cli和php-common两个包，安装失败。</p>
+<p>所以，解决安装包依赖问题有两种解决办法：<br>1. 解决依赖关系<br>按照依赖关系提示，我们把依赖包一一装好<br>2. 忽略依赖关系<br>忽略依赖关系，会强制安装指定包，但是软件很有可能无法正常运行，不推荐使用<br>--nodeps<br>例如忽略php的依赖包php-cli和php-common，强行安装php：</p>
+<h1 id="rpm-ivh-–nodeps-php-5-3-3-26-el6-x86-64-rpm"><a href="#rpm-ivh-–nodeps-php-5-3-3-26-el6-x86-64-rpm" class="headerlink" title="rpm -ivh –nodeps php-5.3.3-26.el6.x86_64.rpm"></a>rpm -ivh –nodeps php-5.3.3-26.el6.x86_64.rpm</h1><p>Preparing… ########################################### [100%]<br>package php-5.4.41-47.el6.art.x86_64 (which is newer than<br>php-5.3.3-26.el6.x86_64) is already installed<br>file /etc/httpd/conf.d/php.conf from install of php-5.3.3-26.el6.x86_64<br>conflicts with file from package php-5.4.41-47.el6.art.x86_64<br>file /usr/lib64/httpd/modules/libphp5.so from install of<br>php-5.3.3-26.el6.x86_64 conflicts with file from package<br>php-5.4.41-47.el6.art.x86_64  </p>
+<h1 id=""><a href="#" class="headerlink" title=" "></a> </h1><p>虽然安装上了php包，但是php服务并不能正常使用。</p>
+<p>3.7 –replacepkgs 重新安装<br>替换上一次原有安装，如果原有的配置文件做了修改，很有可能不执行替换，而是将安装应该安装生成的配置文件重命名为 .rpmnew</p>
+<p>例如，我们安装zsh，然后修改zsh生成的文件，然后使用–replacepkgs来重新安装，来测试我们修改的文件是否被重命名</p>
+<p>首先，安装zsh  </p>
+<h1 id="rpm-ivh-zsh-4-3-10-7-el6-x86-64-rpm-1"><a href="#rpm-ivh-zsh-4-3-10-7-el6-x86-64-rpm-1" class="headerlink" title="rpm -ivh zsh-4.3.10-7.el6.x86_64.rpm"></a>rpm -ivh zsh-4.3.10-7.el6.x86_64.rpm</h1><p>Preparing… ########################################### [100%]<br>1:zsh ########################################### [100%]  </p>
+<h1 id="-1"><a href="#-1" class="headerlink" title=" "></a> </h1><p>查找安装zsh时生成的配置文档  </p>
+<h1 id="rpm-qc-zsh"><a href="#rpm-qc-zsh" class="headerlink" title="rpm -qc zsh"></a>rpm -qc zsh</h1><p>/etc/skel/.zshrc<br>/etc/zlogin<br>/etc/zlogout<br>/etc/zprofile<br>/etc/zshenv<br>/etc/zshrc</p>
+<p>我们修改下/etc/zprofile，在尾行添加一个注释信息  </p>
+<h1 id="echo-“-This-is-comments”-gt-gt-etc-zprofile"><a href="#echo-“-This-is-comments”-gt-gt-etc-zprofile" class="headerlink" title="echo “# This is comments” &gt;&gt; /etc/zprofile"></a>echo “# This is comments” &gt;&gt; /etc/zprofile</h1><p>然后使用 –replacepkgs重新安装zsh  </p>
+<h1 id="rpm-ivh-–replacepkgs-zsh-4-3-10-7-el6-x86-64-rpm"><a href="#rpm-ivh-–replacepkgs-zsh-4-3-10-7-el6-x86-64-rpm" class="headerlink" title="rpm -ivh –replacepkgs zsh-4.3.10-7.el6.x86_64.rpm"></a>rpm -ivh –replacepkgs zsh-4.3.10-7.el6.x86_64.rpm</h1><p>tail -1 /etc/zprofile #查看/etc/zprofile最后一行，我们上次更改的信息并没有被删除</p>
+<p>4. 卸载程序包：<br>rpm [option] package_name #使用包名，而不是带版本号的那个文件名<br>-e: erase<br>如果被其他包依赖：<br>1. 将依赖于此包的所有包一并卸载<br>2. 忽略依赖关系 –nodeps<br>能卸载，但是依赖于此包的程序包可能会运行不正常</p>
+<p>4.1 批量卸载</p>
+<p>rpm -qa | grep “keyword” | xargs rpm -e  </p>
+<p>eg: warning: /etc/zprofile saved as /etc/zprofile.rpmsave</p>
+<p>举例： 我们来删除zsh包  </p>
+<h1 id="rpm-e-zsh"><a href="#rpm-e-zsh" class="headerlink" title="rpm -e zsh"></a>rpm -e zsh</h1><p>warning: /etc/zprofile saved as /etc/zprofile.rpmsave</p>
+<p>注意，删除zsh时候我们得到一个warning，提示我们/etc/zprofile文件修改过，被转存到/etc/zprofile.rpmsave<br>!!! 如果包的配置文件安装后曾被改动过，卸载时，此文件不会卸载，而是被重命名并保留</p>
+<p>5. RPM包升级<br>新版本替换老版本<br>rpm [option] /path/to/package_file<br>1. 升级或安装<br>-Uvh<br>2. 纯升级<br>-Fvh</p>
+<p>升级后可能会带来版本冲突，<br>--force 可以强制升级</p>
+<p>注意： 不应该对内核执行升级操作，而是安装<br>系统允许多内核并存</p>
+<p>6. RPM包查询<br>6.1 查询某包是否安装<br>rpm -q package_name … 可一次查询多个</p>
+<p>例如：查询是否安装了cpp, python, bind  </p>
+<h1 id="rpm-q-cpp-python-bind"><a href="#rpm-q-cpp-python-bind" class="headerlink" title="rpm -q cpp python bind"></a>rpm -q cpp python bind</h1><p>cpp-4.4.7-11.el6.x86_64<br>python-2.6.6-52.el6.x86_64<br>package bind is not installed</p>
+<p>6.2 查询所有已经安装的包<br>rpm -qa<br>按条件过滤： rpm -qa | grep ‘PATTERN’</p>
+<p>例如： 查询以python开头的包都有哪些？  </p>
+<h1 id="rpm-qa-grep-‘-python’"><a href="#rpm-qa-grep-‘-python’" class="headerlink" title="rpm -qa | grep ‘^python’"></a>rpm -qa | grep ‘^python’</h1><p>python-ethtool-0.6-5.el6.x86_64<br>python-decorator-3.0.1-3.1.el6.noarch<br>python-iwlib-0.1-1.2.el6.x86_64<br>python-markupsafe-0.9.2-4.el6.x86_64<br>python-beaker-1.3.1-7.el6.noarch<br>python-pycurl-7.19.0-8.el6.x86_64<br>python-meh-0.12.1-3.el6.noarch<br>python-iniparse-0.3.1-2.1.el6.noarch<br>python-mako-0.3.4-1.el6.noarch<br>python-urlgrabber-3.9.1-9.el6.noarch<br>python-libs-2.6.6-52.el6.x86_64<br>python-2.6.6-52.el6.x86_64<br>python-slip-0.2.20-1.el6_2.noarch<br>python-slip-dbus-0.2.20-1.el6_2.noarch</p>
+<p>6.3 查询包的描述信息<br>rpm -qi package_name #只能查询已经安装包的信息</p>
+<p>例如： 查询zsh包的详细信息  </p>
+<h1 id="rpm-qi-zsh"><a href="#rpm-qi-zsh" class="headerlink" title="rpm -qi zsh"></a>rpm -qi zsh</h1><p>Name : zsh Relocations: (not relocatable)<br>Version : 4.3.10 Vendor: CentOS<br>Release : 7.el6 Build Date: Sun 24 Nov 2013 09:40:59 AM PST<br>Install Date: Thu 11 Jun 2015 08:26:36 AM PDT Build Host:<br>c6b9.bsys.dev.centos.org<br>Group : System Environment/Shells Source RPM: zsh-4.3.10-7.el6.src.rpm<br>Size : 5009102 License: BSD<br>Signature : RSA/SHA1, Sun 24 Nov 2013 11:33:46 AM PST, Key ID 0946fca2c105b9de<br>Packager : CentOS BuildSystem <a href="&lt;http://bugs.centos.org">&lt;http://bugs.centos.org</a>&gt;<br>URL : <a href="http://zsh.sunsite.dk/" target="_blank" rel="external">http://zsh.sunsite.dk/</a><br>Summary : A powerful interactive shell<br>Description :<br>The zsh shell is a command interpreter usable as an interactive login<br>shell and as a shell script command processor. Zsh resembles the ksh<br>shell (the Korn shell), but includes many enhancements. Zsh supports<br>command line editing, built-in spelling correction, programmable<br>command completion, shell functions (with autoloading), a history<br>mechanism, and more.</p>
+<p>简单解释下Relications意义为是否支持指定安装路径，Group为包组名</p>
+<p>6.4 查询某包安装生成了哪些文件<br>rpm -ql package_name #会列出该包生成的所有文档，包括配置文件、帮助文档  </p>
+<p>4.1 查询某包安装生成了哪些配置文件(通常都是存放在/etc/下的文件)<br>rpm -qc package_name<br>4.2 查询某包安装生成了哪些帮助文件<br>rpm -qd package_name<br>4.3 查询程序包的相关脚本<br>rpm -q –scripts package_name</p>
+<p>脚本有4类：<br>preinstall: 安装前要执行的脚本<br>postinstall: 安装完成后要执行的脚本<br>preuninstall: 卸载前要执行的脚本<br>postuninstall： 卸载后要执行的脚本</p>
+<p>例如： 查询zsh包都安装了哪些配置文档?  </p>
+<h1 id="rpm-qc-zsh-1"><a href="#rpm-qc-zsh-1" class="headerlink" title="rpm -qc zsh"></a>rpm -qc zsh</h1><p>/etc/skel/.zshrc<br>/etc/zlogin<br>/etc/zlogout<br>/etc/zprofile<br>/etc/zshenv<br>/etc/zshrc</p>
+<p>查询zsh包都安装了哪些帮助文档?  </p>
+<h1 id="rpm-qd-zsh"><a href="#rpm-qd-zsh" class="headerlink" title="rpm -qd zsh"></a>rpm -qd zsh</h1><p>/usr/share/doc/zsh-4.3.10/BUGS<br>/usr/share/doc/zsh-4.3.10/CONTRIBUTORS<br>/usr/share/doc/zsh-4.3.10/FAQ<br>/usr/share/doc/zsh-4.3.10/FEATURES<br>/usr/share/doc/zsh-4.3.10/LICENCE<br>/usr/share/doc/zsh-4.3.10/MACHINES<br>/usr/share/doc/zsh-4.3.10/NEWS<br>/usr/share/doc/zsh-4.3.10/README<br>/usr/share/doc/zsh-4.3.10/completion-style-guide<br>/usr/share/doc/zsh-4.3.10/zsh-development-guide<br>/usr/share/doc/zsh-4.3.10/zshprompt.pl<br>/usr/share/info/zsh.info-1.gz<br>…<br>6.5 查询某文件是由那个包安装生成的<br>rpm -qf /path/to/conf_file #指定某个配置文档</p>
+<p>比如说/etc/fstab，我们想知道它是哪个包生成的，我们可以这么写：  </p>
+<h1 id="rpm-qf-etc-fstab"><a href="#rpm-qf-etc-fstab" class="headerlink" title="rpm -qf /etc/fstab"></a>rpm -qf /etc/fstab</h1><p>setup-2.8.14-20.el6_4.1.noarch</p>
+<p>就可以知道/etc/fstab文件，是通过setup-2.8.14-20.el6_4.1.noarch 来生成的了。但是这仅针对于已经安装的包可用。<br>对没安装的包进行查询就需要下面的方法。</p>
+<p>6.6 对尚未安装的包执行查询 -p<br>rpm [option] /path/to/package_file #必须指定包的位置及包的全名<br>例如:/media/cdrom/Packages/zsh-4.3.10-7.el6.x86_64.rpm<br>-qpi 描述信息<br>-qpl 会生成了哪些文件<br>-qpc 会生成哪些配置文件<br>-qpd 会生成哪些帮助文件</p>
+<p>例如：我们想查询php包的描述信息</p>
+<h1 id="rpm-qpi-php-5-3-3-26-el6-x86-64-rpm"><a href="#rpm-qpi-php-5-3-3-26-el6-x86-64-rpm" class="headerlink" title="rpm -qpi php-5.3.3-26.el6.x86_64.rpm"></a>rpm -qpi php-5.3.3-26.el6.x86_64.rpm</h1><p>Name : php Relocations: (not relocatable)<br>Version : 5.3.3 Vendor: CentOS<br>Release : 26.el6 Build Date: Fri 22 Nov 2013 03:07:55 AM PST<br>Install Date: (not installed) Build Host: c6b9.bsys.dev.centos.org<br>Group : Development/Languages Source RPM: php-5.3.3-26.el6.src.rpm<br>Size : 3700269 License: PHP<br>Signature : RSA/SHA1, Sun 24 Nov 2013 11:33:09 AM PST, Key ID 0946fca2c105b9de<br>Packager : CentOS BuildSystem <a href="&lt;http://bugs.centos.org">&lt;http://bugs.centos.org</a>&gt;<br>URL : <a href="http://www.php.net/" target="_blank" rel="external">http://www.php.net/</a><br>Summary : PHP scripting language for creating dynamic web sites<br>Description :<br>PHP is an HTML-embedded scripting language. PHP attempts to make it<br>easy for developers to write dynamically generated webpages. PHP also<br>offers built-in database integration for several commercial and<br>non-commercial database management systems, so writing a<br>database-enabled webpage with PHP is fairly simple. The most common<br>use of PHP coding is probably as a replacement for CGI scripts.</p>
+<p>The php package contains the module which adds support for the PHP<br>language to Apache HTTP Server.</p>
+<p>查询生成了哪些文件？<br>rpm -qpl php-5.3.3-26.el6.x86_64.rpm<br>查询生成了哪些配置文件？<br>rpm -qpc php-5.3.3-26.el6.x86_64.rpm<br>查询生成了哪些帮助文件？<br>rpm -qpd php-5.3.3-26.el6.x86_64.rpm</p>
+<p>总之，查询已安装包的特定信息使用的是 rpm -q{i,l,d} ，对未安装的包查询信息，就多了一个p， 为rpm -qp{i,l,d}</p>
+<p>===================================================================================</p>
+<p>7. RPM包校验</p>
+<p>RPM包的合法性验证分两部分：<br>1. 来源合法性<br>2. 包的完整性</p>
+<p>包的制作者使用单项加密提取原始数据的特征码，而后使用自己的私钥加密这段特征码，附加原始数据后面<br>验证过程：<br>前提：必须有可靠机制获取到包制作者的公钥<br>1、使用制作者的公钥解密 加密的特征码， 能解密则意味来源合法<br>2、使用与制作者同样的单向加密算法提取原始数据的特征码，并与解密出来的特征码做比对， 相同，则意味着完整性没问题</p>
+<p>7.1 校验： 检查包后文件属性是否发生变化<br>rpm -V package_name #用的不多</p>
+<p>如检查光盘中zsh包：  </p>
+<h1 id="rpm-V-zsh"><a href="#rpm-V-zsh" class="headerlink" title="rpm -V zsh"></a>rpm -V zsh</h1><p>S.5….T. c /etc/zprofile</p>
+<p>返回给我们一个 S.5….T. c /etc/zprofile, 具体含义如下：</p>
+<p>S file Size differs<br>M Mode differs (includes permissions and file type)<br>5 digest (formerly MD5 sum) differs<br>D Device major/minor number mismatch<br>L readLink(2) path mismatch<br>U User ownership differs<br>G Group ownership differs<br>T mTime differs<br>P caPabilities differ</p>
+<p>某属性没变化的位，显示为 .</p>
+<p>7.2 rpm包来源合法性及完整性检验：<br>前提： 在当前系统上导入包的制作者的公钥<br>导入公钥：<br>rpm –import /path/to/key_file<br>光盘上的公钥就在根目录下面：<br>-r–r–r–. 2 root root 1706 Nov 27 2013 RPM-GPG-KEY-CentOS-6<br>-r–r–r–. 2 root root 1730 Nov 27 2013 RPM-GPG-KEY-CentOS-Debug-6<br>-r–r–r–. 2 root root 1730 Nov 27 2013 RPM-GPG-KEY-CentOS-Security-6<br>-r–r–r–. 2 root root 1734 Nov 27 2013 RPM-GPG-KEY-CentOS-Testing-6</p>
+<p>查看已导入公钥：<br>rpm -qa gpg-pubkey*</p>
+<h1 id="rpm-qa-gpg-pubkey"><a href="#rpm-qa-gpg-pubkey" class="headerlink" title="rpm -qa gpg-pubkey*"></a>rpm -qa gpg-pubkey*</h1><p>gpg-pubkey-5ebd2744-418ffac9<br>gpg-pubkey-c105b9de-4e0fd3a3<br>gpg-pubkey-4520afa9-50ab914c</p>
+<p>查看单条pubkey的详细内容<br>rpm -qi gpg-pubkey-NAME</p>
+<p>比如我查看第一个公钥信息：  </p>
+<h1 id="rpm-qi-gpg-pubkey-5ebd2744-418ffac9"><a href="#rpm-qi-gpg-pubkey-5ebd2744-418ffac9" class="headerlink" title="rpm -qi gpg-pubkey-5ebd2744-418ffac9"></a>rpm -qi gpg-pubkey-5ebd2744-418ffac9</h1><p>Name : gpg-pubkey Relocations: (not relocatable)<br>Version : 5ebd2744 Vendor: (none)<br>Release : 418ffac9 Build Date: Fri 22 May 2015 09:58:23 AM PDT<br>Install Date: Fri 22 May 2015 09:58:23 AM PDT Build Host: localhost<br>Group : Public Keys Source RPM: (none)<br>Size : 0 License: pubkey<br>Signature : (none)<br>Summary : gpg(Atomic Rocket Turtle )<br>Description :<br>-—-BEGIN PGP PUBLIC KEY BLOCK—–<br>Version: rpm-4.8.0 (NSS-3)</p>
+<p>mQGiBEGP+skRBACyZz7muj2OgWc9FxK+Hj7tWPnrfxEN+0PE+n8MtqH+dxwQpMTd<br>gDpOXxJa45GM5pEwB6CFSFK7Fb/faniF9fDbm1Ga7MpBupIBYLactkoOTZMuTlGB<br>T0O5ha4h26YLqFfQOtlEi7d0+BDDdfHRQw3o67ycgRnLgYSA79DISc3MywCgk2TR<br>yd5sRfZAG23b4EDl+D0+oaMEAK73J7zuxf6F6V5EaxLd/w4JVB2xW0Glcn0fACOe<br>8FV9lzcZuo2xPpdGuyj02f/xlqvEav3XqTfFU2no61mA2pamaRNhlo+CEfGc7qde<br>/1twfSgOYqzeCx7+aybyPo8Th41b80FT19mfkjBf6+5NbUHffRabFFh1FmcPVNBn<br>F3FoA/95nRIzqDMItdTRitaZn02dIGNjdwllBD75bSVEvaR9O5hjBo0VMc25DB7f<br>DM2qEO52wCQbAKw9zFC284ekZVDaK4aHYt7iobHaqJEpKHgsDut5WWuMiSLR+SsF<br>aBHIZ9HvrKWLSUQKHU6A1Hva0P0r3GnoCMc/VCVfrLl721SjPbQzQXRvbWljIFJv<br>Y2tldCBUdXJ0bGUgPGFkbWluQGF0b21pY3JvY2tldHR1cnRsZS5jb20+iFkEExEC<br>ABkFAkGP+skECwcDAgMVAgMDFgIBAh4BAheAAAoJEDKpURRevSdEzcQAn1hSHqTO<br>jwv/z/picpOnR+mgycwHAKCBex2ciyXo5xeaQ9w7OMf7Jsmon7kBDQRBj/rMEAQA<br>6JvRndqE4koK0e49fUkICm1X0ZEzsVg9VmUW+Zft5guCRxmGlYTmtlC7oJCToRP/<br>m/xH5uIevGiJycRKB0Ix+Csl6f9QuTkQ7tSTHcaIKbI3tL1x6CCBoWeTGYaOJlvk<br>ubrmajiMFaBfopLH2firoSToDGoUvv4e7bImIHEgNr8AAwUEAND0YR9DOEZvc+Lq<br>Ta/PQyxkdZ75o+Ty/O64E3OmO1Tuw2ciSQXCcwrbrMSE6EHHetxtGCnOdkjjjtmH<br>AnxsxdONv/EJuQmLcoNcsigZZ4tfRdmtXgcbnOmXBgmy1ea1KvWcsmecNSAMJHwR<br>7vDDKzbj4mSmudzjapHeeOewFF10iEYEGBECAAYFAkGP+swACgkQMqlRFF69J0Sq<br>nQCfa/q9Y/oY4dOTGj6MsdmRIQkKZhYAoIscjinFwTru4FVi2MIEzUUMToDK<br>=NOIx<br>-—-END PGP PUBLIC KEY BLOCK—–</p>
+<p>检查包： 安装过程中会自动进行</p>
+<p>手动检查：</p>
+<p>rpm -K /path/to/package_file<br>rpm –checksig /path/to/package_file<br>不检查包完整性(只检查来源合法性)：<br>rpm -K –nodigest<br>不检查来源合法性(只检查包完整性)<br>rpm -K –nosignature</p>
+<p>例如: 手动检查zsh包的包完整性及来源合法性  </p>
+<h1 id="rpm-K-zsh-4-3-10-7-el6-x86-64-rpm"><a href="#rpm-K-zsh-4-3-10-7-el6-x86-64-rpm" class="headerlink" title="rpm -K zsh-4.3.10-7.el6.x86_64.rpm"></a>rpm -K zsh-4.3.10-7.el6.x86_64.rpm</h1><p>zsh-4.3.10-7.el6.x86_64.rpm: rsa sha1 (md5) pgp md5 OK</p>
+<p>仅检查zsh包的包完整性：  </p>
+<h1 id="rpm-K-–nosignature-zsh-4-3-10-7-el6-x86-64-rpm"><a href="#rpm-K-–nosignature-zsh-4-3-10-7-el6-x86-64-rpm" class="headerlink" title="rpm -K –nosignature zsh-4.3.10-7.el6.x86_64.rpm"></a>rpm -K –nosignature zsh-4.3.10-7.el6.x86_64.rpm</h1><p>zsh-4.3.10-7.el6.x86_64.rpm: sha1 md5 OK</p>
+<p>仅检查zsh包的来源合法性：  </p>
+<h1 id="rpm-K-–nodigest-zsh-4-3-10-7-el6-x86-64-rpm"><a href="#rpm-K-–nodigest-zsh-4-3-10-7-el6-x86-64-rpm" class="headerlink" title="rpm -K –nodigest zsh-4.3.10-7.el6.x86_64.rpm"></a>rpm -K –nodigest zsh-4.3.10-7.el6.x86_64.rpm</h1><p>zsh-4.3.10-7.el6.x86_64.rpm: rsa (md5) pgp OK</p>
+<p>======================================================================================================</p>
+<p>8. 数据库重建：<br>RPM的安装，卸载，查询升级，校验等操作都需要RPM的数据库数据正确，如果数据库出错，则无法操作RPM</p>
+<p>数据库目录位于: /var/lib/rpm</p>
+<p>重建有两种方式：  </p>
+<p>8.1. rpm –initdb : 初始化<br>如果事先没有库，会新建一个库； 如果有库，则不会新建</p>
+<p>8.2 rpm –rebuilddb ： 重建<br>直接重建，覆盖原有的数据库</p>
+<p>两种方式重建RPM数据库都不会有提示，直接显示完成</p>
+<p>总结，RPM包管理器是很重要的知识点，整理笔记成此博客，锻炼下自己梳理内容的能力，也方便日后查看，如果有理解不正确的地方，欢迎大家多多指教！</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Linux/" rel="tag"># Linux</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/06/09/Linux网络属性配置总结/" rel="next" title="Linux网络属性配置总结">
+                <i class="fa fa-chevron-left"></i> Linux网络属性配置总结
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/06/13/yum方式软件管理及进阶源码编译安装/" rel="prev" title="yum方式软件管理及进阶源码编译安装">
+                yum方式软件管理及进阶源码编译安装 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="Richie Jing" />
+          <p class="site-author-name" itemprop="name">Richie Jing</p>
+          <p class="site-description motion-element" itemprop="description">Window Server IT pro, love scripting.</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">81</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#rpm-i-media-cdrom-Packages-zsh-4-3-10-7-el6-x86-64-rpm"><span class="nav-number">1.</span> <span class="nav-text">rpm -i /media/cdrom/Packages/zsh-4.3.10-7.el6.x86_64.rpm</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#rpm-iv-media-cdrom-Packages-zsh-4-3-10-7-el6-x86-64-rpm"><span class="nav-number">2.</span> <span class="nav-text">rpm -iv /media/cdrom/Packages/zsh-4.3.10-7.el6.x86_64.rpm</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#rpm-ivv-media-cdrom-Packages-zsh-4-3-10-7-el6-x86-64-rpm"><span class="nav-number">3.</span> <span class="nav-text">rpm -ivv /media/cdrom/Packages/zsh-4.3.10-7.el6.x86_64.rpm</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#rpm-ih-zsh-4-3-10-7-el6-x86-64-rpm"><span class="nav-number">4.</span> <span class="nav-text">rpm -ih zsh-4.3.10-7.el6.x86_64.rpm</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#rpm-ivh-zsh-4-3-10-7-el6-x86-64-rpm"><span class="nav-number">5.</span> <span class="nav-text">rpm -ivh zsh-4.3.10-7.el6.x86_64.rpm</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#rpm-ivh-–test-zsh-4-3-10-7-el6-x86-64-rpm"><span class="nav-number">6.</span> <span class="nav-text">rpm -ivh –test zsh-4.3.10-7.el6.x86_64.rpm</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#rpm-ivh-php-5-3-3-26-el6-x86-64-rpm"><span class="nav-number">7.</span> <span class="nav-text">rpm -ivh php-5.3.3-26.el6.x86_64.rpm</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#rpm-ivh-–nodeps-php-5-3-3-26-el6-x86-64-rpm"><span class="nav-number">8.</span> <span class="nav-text">rpm -ivh –nodeps php-5.3.3-26.el6.x86_64.rpm</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#"><span class="nav-number">9.</span> <span class="nav-text"> </span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#rpm-ivh-zsh-4-3-10-7-el6-x86-64-rpm-1"><span class="nav-number">10.</span> <span class="nav-text">rpm -ivh zsh-4.3.10-7.el6.x86_64.rpm</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#-1"><span class="nav-number">11.</span> <span class="nav-text"> </span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#rpm-qc-zsh"><span class="nav-number">12.</span> <span class="nav-text">rpm -qc zsh</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#echo-“-This-is-comments”-gt-gt-etc-zprofile"><span class="nav-number">13.</span> <span class="nav-text">echo “# This is comments” >> /etc/zprofile</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#rpm-ivh-–replacepkgs-zsh-4-3-10-7-el6-x86-64-rpm"><span class="nav-number">14.</span> <span class="nav-text">rpm -ivh –replacepkgs zsh-4.3.10-7.el6.x86_64.rpm</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#rpm-e-zsh"><span class="nav-number">15.</span> <span class="nav-text">rpm -e zsh</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#rpm-q-cpp-python-bind"><span class="nav-number">16.</span> <span class="nav-text">rpm -q cpp python bind</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#rpm-qa-grep-‘-python’"><span class="nav-number">17.</span> <span class="nav-text">rpm -qa | grep ‘^python’</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#rpm-qi-zsh"><span class="nav-number">18.</span> <span class="nav-text">rpm -qi zsh</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#rpm-qc-zsh-1"><span class="nav-number">19.</span> <span class="nav-text">rpm -qc zsh</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#rpm-qd-zsh"><span class="nav-number">20.</span> <span class="nav-text">rpm -qd zsh</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#rpm-qf-etc-fstab"><span class="nav-number">21.</span> <span class="nav-text">rpm -qf /etc/fstab</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#rpm-qpi-php-5-3-3-26-el6-x86-64-rpm"><span class="nav-number">22.</span> <span class="nav-text">rpm -qpi php-5.3.3-26.el6.x86_64.rpm</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#rpm-V-zsh"><span class="nav-number">23.</span> <span class="nav-text">rpm -V zsh</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#rpm-qa-gpg-pubkey"><span class="nav-number">24.</span> <span class="nav-text">rpm -qa gpg-pubkey*</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#rpm-qi-gpg-pubkey-5ebd2744-418ffac9"><span class="nav-number">25.</span> <span class="nav-text">rpm -qi gpg-pubkey-5ebd2744-418ffac9</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#rpm-K-zsh-4-3-10-7-el6-x86-64-rpm"><span class="nav-number">26.</span> <span class="nav-text">rpm -K zsh-4.3.10-7.el6.x86_64.rpm</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#rpm-K-–nosignature-zsh-4-3-10-7-el6-x86-64-rpm"><span class="nav-number">27.</span> <span class="nav-text">rpm -K –nosignature zsh-4.3.10-7.el6.x86_64.rpm</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#rpm-K-–nodigest-zsh-4-3-10-7-el6-x86-64-rpm"><span class="nav-number">28.</span> <span class="nav-text">rpm -K –nodigest zsh-4.3.10-7.el6.x86_64.rpm</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Richie Jing</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>
