@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="hexo," />
 
 
 
@@ -84,15 +84,16 @@
 
 
 
-<meta name="description" content="Window Server IT pro, love scripting.">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Richie's Personal Blog">
-<meta property="og:url" content="http://yoursite.com/index.html">
+<meta name="description" content="在windows 10下折腾hexo的环境来写博客，这次折腾的部分有git/node.js/hexo, hexo是node.js写的，所以得先安装node.js；然后，在windows上部署hexo变更到Github的时候，连接Github不想每次deploy都要输入密码，最好配置好ssh-key，这时候Git for windows里面有在linux下必要的一些小程序，比如ssh-keygen">
+<meta property="og:type" content="article">
+<meta property="og:title" content="hexo+Github在windows 10下的安装配置">
+<meta property="og:url" content="http://yoursite.com/2016/12/24/hexo+Github在windows 10下的安装配置/index.html">
 <meta property="og:site_name" content="Richie's Personal Blog">
-<meta property="og:description" content="Window Server IT pro, love scripting.">
+<meta property="og:description" content="在windows 10下折腾hexo的环境来写博客，这次折腾的部分有git/node.js/hexo, hexo是node.js写的，所以得先安装node.js；然后，在windows上部署hexo变更到Github的时候，连接Github不想每次deploy都要输入密码，最好配置好ssh-key，这时候Git for windows里面有在linux下必要的一些小程序，比如ssh-keygen">
+<meta property="og:updated_time" content="2016-12-25T15:05:57.532Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Richie's Personal Blog">
-<meta name="twitter:description" content="Window Server IT pro, love scripting.">
+<meta name="twitter:title" content="hexo+Github在windows 10下的安装配置">
+<meta name="twitter:description" content="在windows 10下折腾hexo的环境来写博客，这次折腾的部分有git/node.js/hexo, hexo是node.js写的，所以得先安装node.js；然后，在windows上部署hexo变更到Github的时候，连接Github不想每次deploy都要输入密码，最好配置好ssh-key，这时候Git for windows里面有在linux下必要的一些小程序，比如ssh-keygen">
 
 
 
@@ -120,13 +121,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/"/>
+  <link rel="canonical" href="http://yoursite.com/2016/12/24/hexo+Github在windows 10下的安装配置/"/>
 
 
 
 
 
-  <title> Richie's Personal Blog </title>
+  <title> hexo+Github在windows 10下的安装配置 | Richie's Personal Blog </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -147,9 +148,7 @@
     
   
 
-  <div class="container one-collumn sidebar-position-left 
-   page-home 
- ">
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -230,261 +229,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/12/25/Sublime3的文件名中含中文乱码bug解决/">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="Richie Jing">
-    <meta itemprop="description" content="">
-    <meta itemprop="image" content="/images/avatar.gif">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="Richie's Personal Blog">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="Richie's Personal Blog" src="">
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/12/25/Sublime3的文件名中含中文乱码bug解决/" itemprop="url">
-                  Sublime3的文件名中含中文乱码bug解决
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-12-25T23:18:04+08:00">
-                2016-12-25
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>首先，sublime文件名中文乱码是个bug，在显示dpi高于100%就会触发，我的thinkpad p50的dpi是125%，所以中招。</p>
-<p>解决办法很简单：</p>
-<ol>
-<li>打开 Preferences –&gt; Preference, Settings-User在最后加一句：</li>
-</ol>
-<p>“dpi_scale”: 1.0</p>
-<p>加好后应该类似这样：</p>
-<pre><code>{
-    &quot;ignored_packages&quot;:
-    [
-        &quot;Vintage&quot;
-    ],
-    &quot;dpi_scale&quot;: 1.0
-
-}
-</code></pre><p>注意多一个逗号，这是个python的hash-table，保存后重启一下就ok了。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/12/25/2016年即将过去/">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="Richie Jing">
-    <meta itemprop="description" content="">
-    <meta itemprop="image" content="/images/avatar.gif">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="Richie's Personal Blog">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="Richie's Personal Blog" src="">
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/12/25/2016年即将过去/" itemprop="url">
-                  2016年即将过去
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-12-25T23:06:47+08:00">
-                2016-12-25
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
 
   
 
@@ -517,10 +264,7 @@
             
             
               
-                
-                <a class="post-title-link" href="/2016/12/24/hexo+Github在windows 10下的安装配置/" itemprop="url">
-                  hexo+Github在windows 10下的安装配置
-                </a>
+                hexo+Github在windows 10下的安装配置
               
             
           </h1>
@@ -571,9 +315,7 @@
       
 
       
-        
-          
-            <blockquote>
+        <blockquote>
 <p>在windows 10下折腾hexo的环境来写博客，这次折腾的部分有git/node.js/hexo, hexo是node.js写的，所以得先安装node.js；然后，在windows上部署hexo变更到Github的时候，连接Github不想每次deploy都要输入密码，最好配置好ssh-key，这时候Git for windows里面有在linux下必要的一些小程序，比如ssh-keygen来生成密钥对很方便。不多废话，下面按顺序来。</p>
 </blockquote>
 <hr>
@@ -632,37 +374,62 @@ branch: master
 <pre><code>hexo deploy
 </code></pre><p>ok，现在你的hexo已经部署到Github上了，用<a href="https://jm0477.github.io/来访问到你的博客站点吧！" target="_blank" rel="external">https://jm0477.github.io/来访问到你的博客站点吧！</a></p>
 
-          
+      
+    </div>
+
+    <div>
+      
         
+
       
     </div>
 
     <div>
       
-    </div>
+        
 
-    <div>
       
     </div>
 
 
     <footer class="post-footer">
       
-
+        <div class="post-tags">
+          
+            <a href="/tags/hexo/" rel="tag"># hexo</a>
+          
+        </div>
       
 
       
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/12/25/2016年即将过去/" rel="prev" title="2016年即将过去">
+                2016年即将过去 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
       
-        <div class="post-eof"></div>
+
+      
       
     </footer>
   </article>
 
 
-    
-  </section>
 
-  
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -670,6 +437,10 @@ branch: master
 
 
           
+  <div class="comments" id="comments">
+    
+  </div>
+
 
         </div>
         
@@ -689,8 +460,17 @@ branch: master
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/avatar.gif"
@@ -739,6 +519,22 @@ branch: master
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-Git安装"><span class="nav-number">1.</span> <span class="nav-text">1. Git安装</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#下载-Git-for-windows-下载地址"><span class="nav-number">1.1.</span> <span class="nav-text">下载 Git for windows: 下载地址</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-生成ssh-key"><span class="nav-number">2.</span> <span class="nav-text">2. 生成ssh key</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-安装node-js"><span class="nav-number">3.</span> <span class="nav-text">3. 安装node.js</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#node-js下载地址-下载地址"><span class="nav-number">3.1.</span> <span class="nav-text">node.js下载地址 下载地址</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-安装hexo"><span class="nav-number">4.</span> <span class="nav-text">4. 安装hexo</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-配置hexo"><span class="nav-number">5.</span> <span class="nav-text">5. 配置hexo</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-本地hexo部署到Github"><span class="nav-number">6.</span> <span class="nav-text">6. 本地hexo部署到Github</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
     </div>
@@ -837,6 +633,10 @@ branch: master
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
 
   
 
