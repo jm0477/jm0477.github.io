@@ -241,6 +241,158 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/04/08/Django学习07 django通用视图- 基本概念及写法/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Richie Jing">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar.gif">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Richie's Personal Blog">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Richie's Personal Blog" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/04/08/Django学习07 django通用视图- 基本概念及写法/" itemprop="url">
+                  Django学习07 django通用视图- 基本概念及写法
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-04-08T15:52:26+08:00">
+                2016-04-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>urls.py</p>
+<p>通用视图的包：</p>
+<p>from django.views.generic.simple import direct_to_template</p>
+<p>urlpatterns = patterns(‘’,</p>
+<p>(r’^about/$, direct_to_template, {‘template’: ‘about.html’})</p>
+<p>)</p>
+<p>当请求about的视图时，就是直接调用模板页面about.html</p>
+<p>=======================================================================================================</p>
+<p>urlpatterns = patterns(‘’,</p>
+<p>(r’^about/$, direct_to_template, {‘template’: ‘about.html’})</p>
+<p>(r’^about/(\w+)/$’, abouts)</p>
+<p>)</p>
+<p>views.py:</p>
+<p>from django.template import TemplateDoesNotExisted #模板不存在</p>
+<p>from django.template import Http404</p>
+<p>from django.views.generic.simple import direct_to_template</p>
+<p>def abouts(request, page):</p>
+<p>try:</p>
+<p>return direct_to_template(request, template = ‘about/$s.html’, % page)</p>
+<p>except TemplateDoesNotExisted:</p>
+<p>raise Http404()</p>
+<p>功能是，接收到传入的url及页码，如果存在，直接跳转相应的template页面，如果不存在template，那返回404页面</p>
+<p>=========================================================================================================</p>
+<p>针对publisher对象做一个通用视图</p>
+<p>from django.views.generic import list_detail</p>
+<p>publisher_info = {</p>
+<p>‘queryset’: Publisher.objects.all()</p>
+<p>#lesson1/publisher_info.html 如果没指明，会自动寻找此模板</p>
+<p>‘template’: ‘publisher_info.html’</p>
+<p>}</p>
+<p>urlpatterns = patterns(‘’,</p>
+<p>(r’^publisher/$’, list_detail.object_list, {‘publisher_info’: publisher_info})</p>
+<p>)</p>
+<p>功能是，<br>接受publisher/请求时，将Publisher对象的一个queryset内容传递给指定的模板publisher_info.html(这个模板要在Publisher_info字典里的’template’字段定义)</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
   <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/04/08/Django学习06 django模板库/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1586,218 +1738,6 @@ student.name = student.age = student.save()
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/10/22/基于heartbeat v2 crm实现配置基于nfs的mysql HA集群/">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="Richie Jing">
-    <meta itemprop="description" content="">
-    <meta itemprop="image" content="/images/avatar.gif">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="Richie's Personal Blog">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="Richie's Personal Blog" src="">
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2015/10/22/基于heartbeat v2 crm实现配置基于nfs的mysql HA集群/" itemprop="url">
-                  基于heartbeat v2 crm实现配置基于nfs的mysql HA集群
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2015-10-22T20:17:14+08:00">
-                2015-10-22
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>实验内容：</p>
-<p>配置nfs存储，供两个节点的mysqld服务器使用，使用heartbeat v2的GUI来配置HA的规则，达到node1,node2的两台mysql<br>server一台down机，另一台能够切换资源，继续提供服务</p>
-<p>node1: mysqld server</p>
-<p>node2: mysqld server</p>
-<p>node3: nfs</p>
-<p>实验步骤：</p>
-<p>前提： node1 node2 要配置ssh无密码访问</p>
-<p>1. 配置nfs存储, 172.31.4.224:/mydata</p>
-<p>node3:</p>
-<p>mkdir /mydata</p>
-<p>vim /etc/exports</p>
-<blockquote>
-<p>/mydata 172.31.0.0/16(rw,no_root_squash)</p>
-</blockquote>
-<p>启动nfs服务：</p>
-<p>RH系操作系统在6.0版本之后没有portmap服务控制rpc的启动，由于NFS和nfslock的启动需要向rpc进行注册，rpc不启动的话就会报错。所以先启动rpcbind服务</p>
-<p>service rpcbind start</p>
-<p>service nfs start</p>
-<p>exportfs –rav</p>
-<p>2. mysql server挂在nfs分区</p>
-<p>node1:</p>
-<p>mkdir /mydata</p>
-<p>mount -t nfs 172.31.4.224:/mydata /mydata</p>
-<p>看看管理员是否可以在这块nfs区域内有读写权限(no_root_squash)<br>cd /mydata<br>touch a<br>rm a</p>
-<p>除此之外：<br>node1(mysqlserver)<br>node2(mysqlserver)<br>node3(nfs)的mysql用户也要读写<br>两个高可用节点，一个nfs节点上的权限应该一模一样</p>
-<p>groupadd -r -g 306 mysql<br>useradd -r -g mysql -u 306 mysql</p>
-<p>确保root &amp; mysql用户对nfs分区/mydata有写权限<br>su - mysql<br>touch a<br>rm a</p>
-<p>node2:<br>mkdir /mydata<br>mount -t nfs 172.31.4.224:/mydata /mydata<br>如果报错如下：</p>
-<p><a href="zb_users/upload/2015/10/5628d3c4dfc08660190959.png"><img src="zb_users/upload/2015/10/5628d3c56f703415138641.png" alt="image"></a></p>
-<p>安装下nfs-utils</p>
-<p>yum install nfs-utils –y 就可以解决了</p>
-<p>groupadd -r -g 306 mysql<br>useradd -r -g mysql -u 306 mysql</p>
-<p>确保root &amp; mysql用户对nfs分区/mydata有写权限<br>su - mysql<br>touch a<br>rm a  </p>
-<p>node3:<br>groupadd -r -g 306 mysql<br>useradd -u 306 -g mysql mysql<br>setfacl -m u:mysql:rwx /mydata/</p>
-<p>3. 安装mysql server</p>
-<p>node1:</p>
-<p>mariadb-10.0.10-linux-x86-64.tar.gz</p>
-<p>传一份给node2</p>
-<p>scp mariadb-10.0.10-linux-x86_64.tar.gz node2:/root</p>
-<p>解压缩</p>
-<p>tar xf mariadb-10..10-linux-x86-64.tar.gz -C /usr/local/</p>
-<p>cd /mydata<br>mkdir data binlogs<br>chown -R mysql.mysql data binlogs</p>
-<p>cd /usr/local<br>ln -sv mariadb-10.0.10-linux-x86-64 mysql<br>cd mysql/<br>chown -R root.mysql ./*<br>scripts/mysql_install_db –user=mysql –datadir=/mydata/</p>
-<p>mkdir /etc/mysql<br>cp support-files/my-large.cnf /etc/mysql/my.cnf<br>vim /etc/mysql/my.cnf<br>datadir=/mydata/data<br>innodb_file_per_table= ON<br>log-bin=/mydata/binlogs/master-bin<br>server-id不要动， 两边要一致，因为两个mysqlserver将使用同一组日志</p>
-<p>cp support-files/mysql.server /etc/rc.d/init.d/mysqld<br>chkconfig –add mysqld<br>chkconfig mysqld off</p>
-<p>service mysqld start<br>连接下服务,测试<br>/usr/local/mysql/bin/mysql<br>mysql&gt; CREATE DATABASE testdb;<br>mysql&gt; show databases;<br>mysql&gt; \q</p>
-<p>service mysqld stop<br>再另外一个节点上测试</p>
-<p>node2:</p>
-<p>tar xf mariadb-10.0.10-linux-x86-64.tar.gz -C /usr/local<br>cd /usr/local<br>ln -sv mariadb-10.0.10-linux-x86-64 mysql<br>cd mysql/<br>chown -R root.mysql ./*<br>无需再初始化数据</p>
-<p>mkdir /etc/mysql</p>
-<p>将node1上的my.cnf复制过来(在node1上操作)<br>scp /etc/mysql/my.cnf node2:/etc/mysql/</p>
-<p>cp support-files/msql.server /etc/rc.d/init.d/mysqld<br>chmod +x /etc/rc.d/init.d/mysqld<br>chkconfig –add mysqld<br>chkconfig mysql off</p>
-<p>测试mysql服务<br>service mysqld start</p>
-<p>/usr/local/mysql/bin/mysql<br>mysql&gt;show databases;<br>mysql&gt;show binary logs;<br>mysql&gt;\q</p>
-<p>service mysqld stop</p>
-<p>umount /mydata<br>同时也在node1上卸载umount /mydata</p>
-<p>如果不能卸载提示：</p>
-<p>[root@localhost ~]# umount /mydata<br>umount.nfs: /mydata: device is busy</p>
-<p>fuser -m -v /mydata 查看那个进程占用</p>
-<p>kill -9 26995 直接杀掉进程，再重新卸载</p>
-<p>4. 配置heartbeat V2 GUI</p>
-<p>4.1 安装heartbeat-gui-2.1.4-12.el6.x86_64.rpm</p>
-<p>node1:</p>
-<p>rpm –ivh heartbeat-gui-2.1.4-12.el6.x86_64.rpm</p>
-<p>删除/etc/ha.d/haresource</p>
-<p>在/etc/ha.d/ha.cf文件内添加crm on</p>
-<p>表明，我们在使用crm为资源管理的heartbeat v2版本</p>
-<p>把修改的文件同步给node2</p>
-<p>scp /etc/ha.d/ha.cf node2:/etc/ha.d</p>
-<p>启动heartbeat服务：</p>
-<p>service heartbeat start</p>
-<p>ssh node2 ‘service heartbeat start’</p>
-<p>启动heartbeat GUI：</p>
-<h1 id="hb-gui-amp"><a href="#hb-gui-amp" class="headerlink" title="hb_gui &amp;"></a>hb_gui &amp;</h1><p>加上&amp;表示释放当前shell</p>
-<p><a href="zb_users/upload/2015/10/5628d3c632ee7911454959.png"><img src="zb_users/upload/2015/10/5628d3c6e3c6a524779920.png" alt="image"></a></p>
-<p>给hacluseter设置个密码，默认的密码是空的，而系统不允许空密码登陆</p>
-<p>passwd hacluster</p>
-<p>登陆成功就可以看到如下内容：</p>
-<p><a href="zb_users/upload/2015/10/5628d3c7c4d1d495479747.png"><img src="zb_users/upload/2015/10/5628d3c877464544682639.png" alt="image"></a></p>
-<p>5. heartbeat V2 GUI配置资源</p>
-<p>由于我们要做mysql<br>server的高可用，所以高可用资源应该有VIP，mysqld服务，而且这两个服务必须运行在同一个节点，所以我们定义一个resource group</p>
-<p>定义一个resource group叫 mysqlservice<br>Resource ID: mysqlip<br>ipaddr2:<br>ip: 172.16.100.30<br>nic: eth0<br>cidr_network: 16</p>
-<p>Resource ID: mysqlstore<br>Filesystem<br>device: 172.16.100.9:/mydata<br>directory /mydata<br>fstype: nfs</p>
-<p>Resource ID: mysqlserver<br>mysqld (如果找不到mysqld，关闭GUI，GUI会会重新发现新添加的服务)</p>
-<p>创建好如下：</p>
-<p><a href="zb_users/upload/2015/10/5628d3c9318be997823138.png"><img src="zb_users/upload/2015/10/5628d3c9d88f2932315151.png" alt="image"></a></p>
-<p>启动这个resource group，登录node1：</p>
-<p>给一个登录mysql权限</p>
-<p>node1:<br>/usr/local/mysql<br>mysql&gt; GRANT ALL ON <em>.</em> TO root@’172.16.%.%’ IDENTIFIED BY ‘jingming’<br>mysql&gt; FLUSH PRIVILEGES;<br>mysql&gt;\q  </p>
-<p>找一台集群外的server来访问 node3:<br>yum -y install mysql<br>mysql -uroot -h172.16.100.30 -p 注： 这里要使用VIP来访问mysql服务</p>
-<p>mysql&gt; SHOW DATABASES;<br>mysql&gt; CREATE DATABASES mydb;<br>mysql&gt;\q</p>
-<p>此时，将集群中运行mysqlserver的那个节点，变成standby，观察资源切换</p>
-<p>再用node3来登录mysql</p>
-<p>mysql -uroot -h172.16.100.30 -p<br>mysql&gt; SHOW DATABASES;<br>mysql&gt; \q<br>数据还在，切换成功</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1845,7 +1785,7 @@ student.name = student.age = student.save()
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">82</span>
+                <span class="site-state-item-count">83</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

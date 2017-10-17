@@ -241,6 +241,139 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/17/Windows10配置ssh-key免密登录github/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Richie Jing">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar.gif">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Richie's Personal Blog">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Richie's Personal Blog" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/10/17/Windows10配置ssh-key免密登录github/" itemprop="url">
+                  Windows10配置ssh-key免密登录github
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-10-17T10:26:47+08:00">
+                2017-10-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>先说下配置的需求，我这博客是用hexo框架+github.io做静态展示<br>所以在hexo部署的时候需要hexo deploy一键来部署到github上，linux下很简单，windows下也类似。下面记录下折腾的步骤</p>
+<hr>
+<ol>
+<li>打开Git Bash命令行窗口<br> <code>ls -al ~/.ssh</code> 查看下是否有已经存在的证书，如有请删掉，如没有继续</li>
+<li>输入如下指令(邮箱是你github的帐号):<br> <code>ssh-keygen -t rsa -C &quot;richie.jing@msn.cn&quot;</code><br> 回车，回车</li>
+<li><p>输入如下命令：<br> <code>eval</code>ssh-agent -s<br> ssd-add`</p>
+</li>
+<li><p>复制刚刚生成的key到粘贴板<br> ‘clip &lt; ~/.ssh/id_rsa.pub’</p>
+</li>
+<li>网页打开github的ssh key设置，右键添加一个新的sshkey上去即可</li>
+</ol>
+<p>#测试效果<br>键入以下命令看你的key是否生效：<br>    <code>ssh -T git@github.com</code></p>
+<p>如果提示让你输入yes/no基本就ok了</p>
+<p>完成部署，最后一步：<br><code>hexo generate</code><br><code>hexo deploy</code></p>
+<p>搞定～</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
   <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/13/PowerCli操作Vmware主机时间服务的起停/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1624,158 +1757,6 @@ staticfiles %} 然后用{% static "js/jquery-2.0.0.min.js" %} 的方式来调用
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/04/08/Django学习07 django通用视图- 基本概念及写法/">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="Richie Jing">
-    <meta itemprop="description" content="">
-    <meta itemprop="image" content="/images/avatar.gif">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="Richie's Personal Blog">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="Richie's Personal Blog" src="">
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/04/08/Django学习07 django通用视图- 基本概念及写法/" itemprop="url">
-                  Django学习07 django通用视图- 基本概念及写法
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-04-08T15:52:26+08:00">
-                2016-04-08
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>urls.py</p>
-<p>通用视图的包：</p>
-<p>from django.views.generic.simple import direct_to_template</p>
-<p>urlpatterns = patterns(‘’,</p>
-<p>(r’^about/$, direct_to_template, {‘template’: ‘about.html’})</p>
-<p>)</p>
-<p>当请求about的视图时，就是直接调用模板页面about.html</p>
-<p>=======================================================================================================</p>
-<p>urlpatterns = patterns(‘’,</p>
-<p>(r’^about/$, direct_to_template, {‘template’: ‘about.html’})</p>
-<p>(r’^about/(\w+)/$’, abouts)</p>
-<p>)</p>
-<p>views.py:</p>
-<p>from django.template import TemplateDoesNotExisted #模板不存在</p>
-<p>from django.template import Http404</p>
-<p>from django.views.generic.simple import direct_to_template</p>
-<p>def abouts(request, page):</p>
-<p>try:</p>
-<p>return direct_to_template(request, template = ‘about/$s.html’, % page)</p>
-<p>except TemplateDoesNotExisted:</p>
-<p>raise Http404()</p>
-<p>功能是，接收到传入的url及页码，如果存在，直接跳转相应的template页面，如果不存在template，那返回404页面</p>
-<p>=========================================================================================================</p>
-<p>针对publisher对象做一个通用视图</p>
-<p>from django.views.generic import list_detail</p>
-<p>publisher_info = {</p>
-<p>‘queryset’: Publisher.objects.all()</p>
-<p>#lesson1/publisher_info.html 如果没指明，会自动寻找此模板</p>
-<p>‘template’: ‘publisher_info.html’</p>
-<p>}</p>
-<p>urlpatterns = patterns(‘’,</p>
-<p>(r’^publisher/$’, list_detail.object_list, {‘publisher_info’: publisher_info})</p>
-<p>)</p>
-<p>功能是，<br>接受publisher/请求时，将Publisher对象的一个queryset内容传递给指定的模板publisher_info.html(这个模板要在Publisher_info字典里的’template’字段定义)</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1823,7 +1804,7 @@ staticfiles %} 然后用{% static "js/jquery-2.0.0.min.js" %} 的方式来调用
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">82</span>
+                <span class="site-state-item-count">83</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

@@ -241,6 +241,187 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/06/25/Linux上基于网络自动化安装系统(CentOS6.5+TFTP+PXE)/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Richie Jing">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar.gif">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Richie's Personal Blog">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Richie's Personal Blog" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2015/06/25/Linux上基于网络自动化安装系统(CentOS6.5+TFTP+PXE)/" itemprop="url">
+                  Linux上基于网络自动化安装系统(CentOS6.5+TFTP+PXE)
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2015-06-25T16:52:32+08:00">
+                2015-06-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>Linux上基于网络自动化安装系统(CentOS6.5+DHCP+TFTP+PXE)</p>
+<p>一、前言</p>
+<p>安装系统常用的方式就是，光驱安装，U盘安装，但是这种手动安装方法效率都很低，而且出错概率大。<br>现在网卡速率也都基本1000M，所以网络安装就显得更简单，把管理员从重复、繁琐的安装操作中解放出来。<br>当然，这只是一个局域网内的实验配置，生产环境会有更专业的解决方案，但是这个原理都是一样的。</p>
+<p>二、原理</p>
+<p>本次实验用到的协议和技术有：<br>DHCP: Dynamic Host Configuration Protocol 动态主机配置协议<br>TFTP: Trivial File Transfer Protocol 小文件传输协议<br>PXE： Preboot Execution Environment远程引导技术</p>
+<p>上图告诉我们本次网络安装中DHCP,TFTP,PXE的关系和启动的过程，本次实验DHCP和TFTP是在同一台服务器。<br>详细流程如下：</p>
+<p>如图：</p>
+<p><a href="zb_users/upload/2015/06/558bc14c8da7e335558581.png"><img src="zb_users/upload/2015/06/558bc14d097e3113747543.png" alt="image"></a></p>
+<p>1. Target client向DHCP服务器发送DHCP请求<br>首先，client端的网卡一定要支持PXE，并且将client的BIOS设置成网络启动为第一顺序，然后PXE<br>BootROM会以UDP协议发送一个广播请求DISCOVER，向网络中的DHCP服务器索取IP地址等信息。</p>
+<p>2. DHCP收到广播，并发送广播包回应Client一个OFFER，意义为我可以给你提供ip信息</p>
+<p>3. Client收到DHCP的OFFER后，继续发送广播包，向DHCP服务发起REQUEST</p>
+<p>4. DHCP服务器收到REQUEST后，验证是否来自合法的PXE<br>Client请求，通过验证后，会响应给client提供：IP地址，pxelinux启动程序位置(TFTP)，以及配置文件所在位置</p>
+<p>5. Client向TFTP服务器请求下载启动文件，文件包括：<br>pxelinux.0, vmlinuz, initrd.img, pxelinux.cfg/default, pxelinux.cfg/list</p>
+<p>6. TFTP服务器收到请求后，启动TFTP并开始传送启动文件<br>当服务器收到客户端的请求后，他们之间之后将有更多的信息在客户端与服务器之间作应答, 用以决定启动参数。BootROM 由 TFTP 通讯协议从Boot<br>Server下载启动安装程序所必须的文件（pxelinux.0、pxelinux.cfg/default）。default文件下载完成后，系统会下载并读取pxelinux.cfg/list文件，操作人员需要安装list中列出的系统进行选择，启动对应选择的Linux系统并安装程序的引导内核。</p>
+<p>三、实验思路</p>
+<p>1. 前提条件：<br>Client机器必须支持PXE启动<br>Client机器，DHCP，TFTP必须在同一个局域网内<br>要安装的系统需要有对pxeboot的支持</p>
+<p>2. 方案数据：  </p>
+<p>预安装系统：<br>CentOS6.6</p>
+<p>DHCP服务器(TFTP服务器)信息：<br>IP：192.168.100.200<br>OS： CentOS6.6</p>
+<p>Client机器信息：<br>MAC: 00:0c:29:c1:3a:ab<br>ip: 192.168.100.222 (可以在DHCP配置中预留)</p>
+<p>四、实验具体操作步骤</p>
+<p>1. DHCP服务的配置  </p>
+<p>1) 安装dhco服务器包：  </p>
+<p>#yum -y install dhcp</p>
+<p>2) 编辑dhcp配置文件：<br>a. 可以通过rpm -ql dhcp来查看配置文件的sample，这样编辑起来更容易些：  </p>
+<p>#rpm -ql dhcp<br>查到样例在这里 /usr/share/doc/dhcp-4.1.1/dhcpd.conf.sample  </p>
+<p>#复制dhcpd.confg.sample到/etc/dhcp/dhcpd.conf  </p>
+<p>#cp /usr/share/doc/dhcp-4.1.1/dhcpd.conf<br>b. 编辑dhcpd.conf</p>
+<p>vim /etc/dhcp/dhcpd.conf</p>
+<p>option domain-name “richie.com”;<br>option domain-name-servers 8.8.8.8;</p>
+<p>default-lease-time 86400;<br>max-lease-time 100000;</p>
+<p>log-facility local7;<br>subnet 192.168.100.0 netmask 255.255.255.0 {<br>range 192.168.100.201 192.168.100.222;  </p>
+<p>#option routers 192.168.100.200;<br>next-server 192.168.100.200; # TFTP服务器的IP（这里就是本机的IP）<br>filename “pxelinux.0”;<br>}</p>
+<p>重点注意 next-server 和 filename参数，这里分别指定了TFTP服务器的位置和启动文件的名称</p>
+<p>c. 启动DHCP服务<br>启动之前，应该检测下配置文件是否有错误，可以用以下命令：  </p>
+<p>#service dhcpd configtest<br>如果提示#Syntax: OK 那就没问题，继续启动DHCP服务</p>
+<p>#service dhcpd restart<br>2. TFTP服务器配置<br>1) 安装tftp服务包  </p>
+<p>#yum -y install tftp-server  </p>
+<p>#TFTP的配置文件位于 /etc/xinetd.d/tftp</p>
+<p>2）启动tftp服务<br>由于tftp是瞬时守护进程，依赖于xinetd来监听，所以启动tftp，必须要重启xinetd来是让配置生效</p>
+<p>#启动tftp两种方式：<br>a. 修改tftp配置文件中disable=no  </p>
+<p>#vim /etc/xinetd.d/tftp  </p>
+<p>#disable=no</p>
+<p>b. 用chkconfig命令  </p>
+<p>#chkconfig tftp on</p>
+<p>注意，两种方式任选其一都可以实现，但是必须要重启xinetd，命令如下：</p>
+<p>#service xinetd restart<br>查看udp 69端口是否监听  </p>
+<h1 id="ss-unl-grep-69"><a href="#ss-unl-grep-69" class="headerlink" title="ss -unl | grep :69"></a>ss -unl | grep :69</h1><p>3) 准备启动文件<br>a. 启动镜像文件pxelinux.0的准备<br>获取这个文件，需要安装syslinux包，然后将pxelinux.0复制到/var/lib/tftpboot目录  </p>
+<p>#yum -y install syslinux  </p>
+<p>#cp /usr/share/syslinux/pxelinux.0 /var/lib/tftpboot</p>
+<p>b. 提供引导内核等文件<br>同时在/var/lib/tftpboot目录下创建pxelinux.cfg目录<br>挂载系统光盘，假设位置为/media/cdrom/</p>
+<h1 id="cp-media-cdrom-images-pxeboot-vmlinuz-initrd-img-var-lib-tftpboot"><a href="#cp-media-cdrom-images-pxeboot-vmlinuz-initrd-img-var-lib-tftpboot" class="headerlink" title="cp /media/cdrom/images/pxeboot/{vmlinuz,initrd.img} /var/lib/tftpboot/"></a>cp /media/cdrom/images/pxeboot/{vmlinuz,initrd.img} /var/lib/tftpboot/</h1><h1 id="cp-media-cdrom-isolinux-splash-jpg-vesamenu-c32-boot-msg"><a href="#cp-media-cdrom-isolinux-splash-jpg-vesamenu-c32-boot-msg" class="headerlink" title="cp /media/cdrom/isolinux/{splash.jpg,vesamenu.c32,boot.msg}"></a>cp /media/cdrom/isolinux/{splash.jpg,vesamenu.c32,boot.msg}</h1><p>/var/lib/tftpboot</p>
+<h1 id="mkdir-var-lib-tftpboot-pxelinux-cfg"><a href="#mkdir-var-lib-tftpboot-pxelinux-cfg" class="headerlink" title="mkdir /var/lib/tftpboot/pxelinux.cfg/"></a>mkdir /var/lib/tftpboot/pxelinux.cfg/</h1><h1 id="cp-media-cdrom-isolinux-isolinux-cfg-var-lib-tftpboot-pxelinux-cfg-default"><a href="#cp-media-cdrom-isolinux-isolinux-cfg-var-lib-tftpboot-pxelinux-cfg-default" class="headerlink" title="cp /media/cdrom/isolinux/isolinux.cfg /var/lib/tftpboot/pxelinux.cfg/default"></a>cp /media/cdrom/isolinux/isolinux.cfg /var/lib/tftpboot/pxelinux.cfg/default</h1><p>3. 提供安装源<br>这里我们基于http来提供，挂载CentOS安装光盘镜像<br>a. 安装http服务  </p>
+<h1 id="yum-y-install-httpd"><a href="#yum-y-install-httpd" class="headerlink" title="yum -y install httpd"></a>yum -y install httpd</h1><h1 id="mkdir-pv-var-www-html-centos-6-x84-64-用-6-x86-64这种结构，以后便于用变量来引用这个地址"><a href="#mkdir-pv-var-www-html-centos-6-x84-64-用-6-x86-64这种结构，以后便于用变量来引用这个地址" class="headerlink" title="mkdir -pv /var/www/html/centos/6/x84_64 #用/6/x86_64这种结构，以后便于用变量来引用这个地址"></a>mkdir -pv /var/www/html/centos/6/x84_64 #用/6/x86_64这种结构，以后便于用变量来引用这个地址</h1><h1 id="mount-–bind-media-cdrom-var-www-html-centos-6-x84-64-–bind可以绑定两个挂载地址"><a href="#mount-–bind-media-cdrom-var-www-html-centos-6-x84-64-–bind可以绑定两个挂载地址" class="headerlink" title="mount –bind /media/cdrom /var/www/html/centos/6/x84_64 #–bind可以绑定两个挂载地址"></a>mount –bind /media/cdrom /var/www/html/centos/6/x84_64 #–bind可以绑定两个挂载地址</h1><p>然后我们就可以用 在ks.cfg指定安装源为 <a href="http://192.168.100.200/centos/6/x86_64" target="_blank" rel="external">http://192.168.100.200/centos/6/x86_64</a></p>
+<p>4. 提供ks.cfg</p>
+<p>这里不详细提供如何配置ks.cfg， 这个是kickstart的脚本。可以使用system-config-kickstart工具来创建</p>
+<p>ok，基本ok，附图来欣赏下，启动成功的样子吧~~</p>
+<p>这个tftp的信息会一闪而过，大家就当是了解下过程吧</p>
+<p><a href="zb_users/upload/2015/06/558bc14d51bff254534422.png"><img src="zb_users/upload/2015/06/558bc14db7bbd146157674.png" alt="image"></a></p>
+<p><a href="zb_users/upload/2015/06/558bc14eb9fe6495679188.png"><img src="zb_users/upload/2015/06/558bc14fee4cc317774618.png" alt="image"></a></p>
+<p>在这个menu状态，按ESC可以进入boot命令行，可以继续键入boot<br>option来指定ks脚本啊，配置ip信息等好多内容，具体的option可以参考redhat的installation guide文档很详细的。</p>
+<p><a href="zb_users/upload/2015/06/558bc15023cf6543610518.png"><img src="zb_users/upload/2015/06/558bc1505bec2093137219.png" alt="image"></a></p>
+<p>本次实验就到这里， 谢谢大家的关注！</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
   <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/06/24/DHCP服务介绍及Linux下DHCP服务的管理配置/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2127,136 +2308,6 @@ HOME=/
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/05/25/Linux变量引用及命令替换/">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="Richie Jing">
-    <meta itemprop="description" content="">
-    <meta itemprop="image" content="/images/avatar.gif">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="Richie's Personal Blog">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="Richie's Personal Blog" src="">
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2015/05/25/Linux变量引用及命令替换/" itemprop="url">
-                  Linux变量引用及命令替换
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2015-05-25T10:48:02+08:00">
-                2015-05-25
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>初学bash编程，其中的{} ()很晕，不知道都是干吗用的。 一写起来就不确定到底该用哪个了，这里记录一下：</p>
-<p>变量赋值：</p>
-<pre><code>a=&apos;abc&apos;
-</code></pre><p>变量引用：</p>
-<p>当被引用变量处于长字符串中间，用$ 和{}括起来</p>
-<pre><code>echo xx${a}xx
-</code></pre><p>命令替换：</p>
-<p>两种方式：</p>
-<p>一对反引号:  </p>
-<pre><code>`date` #此命令则是返回 执行date的结果 为 Sun May 24 19:56:01 PDT 2015
-</code></pre><p>一对小括号：</p>
-<pre><code>$(date) # 和`date`的效果一样
-</code></pre>
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2304,7 +2355,7 @@ HOME=/
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">82</span>
+                <span class="site-state-item-count">83</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

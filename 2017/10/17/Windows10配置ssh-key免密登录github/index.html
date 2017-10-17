@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Django," />
+  <meta name="keywords" content="Hexo, NexT" />
 
 
 
@@ -84,43 +84,28 @@
 
 
 
-<meta name="description" content="根据这个例子我们来写:
-#
-The time is  {% current_time &quot;%Y-%m-%d %H:%M:%S&quot; %} 
-会显示成: 2016-1-1 10：10：10
-首先创建tamplatetags文件夹，与view同级目录
-其次创建init.py， 和extra_tags.py
-然后书写:
-register = template.Library()
-然后写一个分析器
-然后写一个节">
+<meta name="description" content="先说下配置的需求，我这博客是用hexo框架+github.io做静态展示所以在hexo部署的时候需要hexo deploy一键来部署到github上，linux下很简单，windows下也类似。下面记录下折腾的步骤
+
+
+打开Git Bash命令行窗口 ls -al ~/.ssh 查看下是否有已经存在的证书，如有请删掉，如没有继续
+输入如下指令(邮箱是你github的帐号): ssh-keygen">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Django学习06 django模板库">
-<meta property="og:url" content="http://yoursite.com/2016/04/08/Django学习06 django模板库/index.html">
+<meta property="og:title" content="Windows10配置ssh-key免密登录github">
+<meta property="og:url" content="http://yoursite.com/2017/10/17/Windows10配置ssh-key免密登录github/index.html">
 <meta property="og:site_name" content="Richie's Personal Blog">
-<meta property="og:description" content="根据这个例子我们来写:
-#
-The time is  {% current_time &quot;%Y-%m-%d %H:%M:%S&quot; %} 
-会显示成: 2016-1-1 10：10：10
-首先创建tamplatetags文件夹，与view同级目录
-其次创建init.py， 和extra_tags.py
-然后书写:
-register = template.Library()
-然后写一个分析器
-然后写一个节">
-<meta property="og:updated_time" content="2017-01-29T02:05:46.000Z">
+<meta property="og:description" content="先说下配置的需求，我这博客是用hexo框架+github.io做静态展示所以在hexo部署的时候需要hexo deploy一键来部署到github上，linux下很简单，windows下也类似。下面记录下折腾的步骤
+
+
+打开Git Bash命令行窗口 ls -al ~/.ssh 查看下是否有已经存在的证书，如有请删掉，如没有继续
+输入如下指令(邮箱是你github的帐号): ssh-keygen">
+<meta property="og:updated_time" content="2017-10-17T02:49:54.907Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Django学习06 django模板库">
-<meta name="twitter:description" content="根据这个例子我们来写:
-#
-The time is  {% current_time &quot;%Y-%m-%d %H:%M:%S&quot; %} 
-会显示成: 2016-1-1 10：10：10
-首先创建tamplatetags文件夹，与view同级目录
-其次创建init.py， 和extra_tags.py
-然后书写:
-register = template.Library()
-然后写一个分析器
-然后写一个节">
+<meta name="twitter:title" content="Windows10配置ssh-key免密登录github">
+<meta name="twitter:description" content="先说下配置的需求，我这博客是用hexo框架+github.io做静态展示所以在hexo部署的时候需要hexo deploy一键来部署到github上，linux下很简单，windows下也类似。下面记录下折腾的步骤
+
+
+打开Git Bash命令行窗口 ls -al ~/.ssh 查看下是否有已经存在的证书，如有请删掉，如没有继续
+输入如下指令(邮箱是你github的帐号): ssh-keygen">
 
 
 
@@ -148,13 +133,13 @@ register = template.Library()
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2016/04/08/Django学习06 django模板库/"/>
+  <link rel="canonical" href="http://yoursite.com/2017/10/17/Windows10配置ssh-key免密登录github/"/>
 
 
 
 
 
-  <title> Django学习06 django模板库 | Richie's Personal Blog </title>
+  <title> Windows10配置ssh-key免密登录github | Richie's Personal Blog </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -267,7 +252,7 @@ register = template.Library()
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/04/08/Django学习06 django模板库/">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/17/Windows10配置ssh-key免密登录github/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="Richie Jing">
@@ -291,7 +276,7 @@ register = template.Library()
             
             
               
-                Django学习06 django模板库
+                Windows10配置ssh-key免密登录github
               
             
           </h1>
@@ -306,8 +291,8 @@ register = template.Library()
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-04-08T15:52:12+08:00">
-                2016-04-08
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-10-17T10:26:47+08:00">
+                2017-10-17
               </time>
             
 
@@ -342,41 +327,21 @@ register = template.Library()
       
 
       
-        <p>根据这个例子我们来写:</p>
-<p>#</p>
-<p>The time is  {% current_time "%Y-%m-%d %H:%M:%S" %} </p>
-<p>会显示成: 2016-1-1 10：10：10</p>
-<p>首先创建tamplatetags文件夹，与view同级目录</p>
-<p>其次创建<strong>init</strong>.py， 和extra_tags.py</p>
-<p>然后书写:</p>
-<p>register = template.Library()</p>
-<p>然后写一个分析器</p>
-<p>然后写一个节点</p>
-<p>import datetime</p>
-<p>from django import tempate</p>
-<p>register = tempate.Library()</p>
-<p>完整的复杂标签书写方法</p>
-<p>@register.tag(name=”current_time”)</p>
-<p>def do_current_time(parse, token):</p>
-<p>try:</p>
-<p>tag, format = token.split_contents()</p>
-<p>except ValueError</p>
-<p>msg = “%r % tokem.split_contents()[0”</p>
-<p>raise template.TemplateSyntaxError(msg)</p>
-<p>return CurrentTimeNode(format[1:-1])</p>
-<p>class CurrentTimeNode(template.Node):</p>
-<p>def <strong>init</strong>(self):</p>
-<p>self.format = str(format)</p>
-<p>def render(self, context):</p>
-<p>now = datetime.datetime.now()</p>
-<p>return now.strftime(self.format)</p>
-<p>非常简单的自定义标签的书写方法</p>
-<p>@register.simple_tag</p>
-<p>def current_time(format):</p>
-<p>try:</p>
-<p>return datetime.datetime.now().strftime(str(format))</p>
-<p>except UnicodeEncodeError:</p>
-<p>raise …..</p>
+        <p>先说下配置的需求，我这博客是用hexo框架+github.io做静态展示<br>所以在hexo部署的时候需要hexo deploy一键来部署到github上，linux下很简单，windows下也类似。下面记录下折腾的步骤</p>
+<hr>
+<ol>
+<li>打开Git Bash命令行窗口<br> <code>ls -al ~/.ssh</code> 查看下是否有已经存在的证书，如有请删掉，如没有继续</li>
+<li>输入如下指令(邮箱是你github的帐号):<br> <code>ssh-keygen -t rsa -C &quot;richie.jing@msn.cn&quot;</code><br> 回车，回车</li>
+<li><p>输入如下命令：<br> <code>eval</code>ssh-agent -s<br> ssd-add`</p>
+</li>
+<li><p>复制刚刚生成的key到粘贴板<br> ‘clip &lt; ~/.ssh/id_rsa.pub’</p>
+</li>
+<li>网页打开github的ssh key设置，右键添加一个新的sshkey上去即可</li>
+</ol>
+<p>#测试效果<br>键入以下命令看你的key是否生效：<br>    <code>ssh -T git@github.com</code></p>
+<p>如果提示让你输入yes/no基本就ok了</p>
+<p>完成部署，最后一步：<br><code>hexo generate</code><br><code>hexo deploy</code></p>
+<p>搞定～</p>
 
       
     </div>
@@ -398,19 +363,13 @@ register = template.Library()
 
     <footer class="post-footer">
       
-        <div class="post-tags">
-          
-            <a href="/tags/Django/" rel="tag"># Django</a>
-          
-        </div>
-      
 
       
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/04/08/Django学习05 django Context和RequestContext处理器/" rel="next" title="Django学习05 django Context和RequestContext处理器">
-                <i class="fa fa-chevron-left"></i> Django学习05 django Context和RequestContext处理器
+              <a href="/2017/10/13/PowerCli操作Vmware主机时间服务的起停/" rel="next" title="PowerCli操作Vmware主机时间服务的起停">
+                <i class="fa fa-chevron-left"></i> PowerCli操作Vmware主机时间服务的起停
               </a>
             
           </div>
@@ -418,10 +377,6 @@ register = template.Library()
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/04/08/Django学习07 django通用视图- 基本概念及写法/" rel="prev" title="Django学习07 django通用视图- 基本概念及写法">
-                Django学习07 django通用视图- 基本概念及写法 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
