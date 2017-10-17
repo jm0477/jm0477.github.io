@@ -241,6 +241,262 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/10/22/基于heartbeat v1 实现基础的httpd高可用集群/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Richie Jing">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar.gif">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Richie's Personal Blog">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Richie's Personal Blog" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2015/10/22/基于heartbeat v1 实现基础的httpd高可用集群/" itemprop="url">
+                  基于heartbeat v1 实现基础的httpd高可用集群
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2015-10-22T14:19:51+08:00">
+                2015-10-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>实验内容：</p>
+<p>两台web服务器</p>
+<p>node1: 172.31.4.222</p>
+<p>node2: 172.31.4.223</p>
+<p>vip： 172.31.4.229</p>
+<p>实验资源：</p>
+<p>1. 高可用的VIP</p>
+<p>2. httpd服务</p>
+<p>实验目的：</p>
+<p>让两台httpd可以实现高可用，通过访问VIP对外提供web服务，一台httpd服务down机，可以自动迁移到另外一台。</p>
+<p>实验步骤：</p>
+<p>一、资源准备</p>
+<p>1. 让node1,node2 可以用ssh无障碍通信</p>
+<p>登陆node1:</p>
+<h1 id="ssh-root-172-31-4-222"><a href="#ssh-root-172-31-4-222" class="headerlink" title="ssh root@172.31.4.222"></a>ssh <a href="mailto:root@172.31.4.222" target="_blank" rel="external">root@172.31.4.222</a></h1><h1 id="ssh-keygen-–t-rsa-–P-‘’"><a href="#ssh-keygen-–t-rsa-–P-‘’" class="headerlink" title="ssh-keygen –t rsa –P ‘’"></a>ssh-keygen –t rsa –P ‘’</h1><p>编辑/etc/hosts文件，添加两个节点可以通过名称解析，也可以使用dns服务器，但是如果dns服务器损坏将损坏HA集群。这里还是使用/etc/hosts</p>
+<p>172.31.4.222 node1.richie.com node1<br>172.31.4.223 node2.richie.com node2  </p>
+<p>给node1设置好hostname, 确保名称要和 ‘uname –n’ 获取到的一致才可以，否则heartbeat服务无法启动</p>
+<p>将密钥复制给node2</p>
+<p>ssh-copy-id –I .ssh/id_rsa.pub <a href="mailto:root@node2" target="_blank" rel="external">root@node2</a></p>
+<p>登陆node2, 重复上述步骤实现node2 –&gt; node1之间的ssh无密码互访</p>
+<p>至此，node1,node2就可以无密码ssh互访了.</p>
+<p>2. 确保node1,node2的时间同步</p>
+<p>node1:</p>
+<p>ssh node2.richie.com ‘date’;date</p>
+<p>如果时间不一致，分别运行ntpdate NTPSERVERIP，保证两个node都指向同一个ntp服务器</p>
+<p>设置个crontab定时任务保证时间定期更新</p>
+<p>crontab –e</p>
+<p><em>/5 </em> <em> </em> * /usr/sbin/ntpdate 172.16.0.1 &amp;&gt; /dev/null</p>
+<p>3. heartbeat安装</p>
+<p>3.1 解决依赖性</p>
+<p>安装heartbeat有些依赖包需要安装，而有些包(libnet)在epel源才有，所以先安装epel源</p>
+<p>rpm -ivh <a href="http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-
+release-6-8.noarch.rpm" target="_blank" rel="external">http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-
+release-6-8.noarch.rpm</a></p>
+<p>安装依赖包</p>
+<p>yum install perl-TimeDate PyXML libnet net-snmp-libs</p>
+<p>安装heartbeat及组件</p>
+<p>由于CentOS6 提供的是heartbeat v3，不要使用yum来安装heartbeat，会被系统替换成v3版本的cluster-glue</p>
+<p>heartbeat-2.1.4-12.el6.x86_64.rpm<br>heartbeat-debuginfo-2.1.4-12.el6.x86_64.rpm<br>heartbeat-devel-2.1.4-12.el6.x86_64.rpm<br>heartbeat-gui-2.1.4-12.el6.x86_64.rpm<br>heartbeat-ldirectord-2.1.4-12.el6.x86_64.rpm<br>heartbeat-pils-2.1.4-12.el6.x86_64.rpm<br>heartbeat-stonith-2.1.4-12.el6.x86_64.rpm</p>
+<p>rpm -ivh heartbeat-pils-2.1.4-12.el6.x86_64.rpm</p>
+<p>rpm -ivh heartbeat-2.1.4-12.el6.x86_64.rpm heartbeat-<br>stonith-2.1.4-12.el6.x86_64.rpm</p>
+<p>node1上安装好后，把文件传到node2,node3</p>
+<p>scp heartbeat-* node2:/root</p>
+<p>scp heartbeat-* node3:/root</p>
+<p>4. heartbeat v2配置</p>
+<p>虽然我们安装的是heartbeat v2版本，但是是和v1兼容的，修改配置文件ha.cf即可</p>
+<p>heartbeat v1的配置文件：</p>
+<p>/etc/ha.d/ha.cf 主配置文件</p>
+<p>/etc/ha.d/authkeys 权限必须为400,600</p>
+<p>/etc/ha.d/haresources.cf 配置资源的文件</p>
+<p>4.1 ha.cf的配置：</p>
+<p>node1:</p>
+<p>默认没有提供配置文件，需要去取sample创建</p>
+<h1 id="cp-usr-share-doc-heartbeat-2-1-4-ha-cf-haresources-authkeys-etc-ha-d"><a href="#cp-usr-share-doc-heartbeat-2-1-4-ha-cf-haresources-authkeys-etc-ha-d" class="headerlink" title="cp /usr/share/doc/heartbeat-2.1.4/{ha.cf,haresources,authkeys} /etc/ha.d"></a>cp /usr/share/doc/heartbeat-2.1.4/{ha.cf,haresources,authkeys} /etc/ha.d</h1><p>vim ha.cf 主要的几个配置项</p>
+<p>logfacility local0 使用rsyslog记录日志</p>
+<p>logfile /var/log/ha-log 使用自己维护的日志文件</p>
+<p>mcast eth0 225.100.90.101 694 1 0 组播网卡及组播方式，下面是详细介绍</p>
+<blockquote>
+<h1 id="Set-up-a-multicast-heartbeat-medium"><a href="#Set-up-a-multicast-heartbeat-medium" class="headerlink" title="Set up a multicast heartbeat medium"></a>Set up a multicast heartbeat medium</h1><h1 id="mcast-dev-mcast-group-port-ttl-loop"><a href="#mcast-dev-mcast-group-port-ttl-loop" class="headerlink" title="mcast [dev] [mcast group] [port] [ttl] [loop]"></a>mcast [dev] [mcast group] [port] [ttl] [loop]</h1><h1 id=""><a href="#" class="headerlink" title=" "></a> </h1><h1 id="dev-device-to-send-rcv-heartbeats-on"><a href="#dev-device-to-send-rcv-heartbeats-on" class="headerlink" title="[dev] device to send/rcv heartbeats on"></a>[dev] device to send/rcv heartbeats on</h1><h1 id="mcast-group-multicast-group-to-join-class-D-multicast-address"><a href="#mcast-group-multicast-group-to-join-class-D-multicast-address" class="headerlink" title="[mcast group] multicast group to join (class D multicast address"></a>[mcast group] multicast group to join (class D multicast address</h1><h1 id="224-0-0-0-239-255-255-255"><a href="#224-0-0-0-239-255-255-255" class="headerlink" title="224.0.0.0 - 239.255.255.255)"></a>224.0.0.0 - 239.255.255.255)</h1><h1 id="port-udp-port-to-sendto-rcvfrom-set-this-value-to-the"><a href="#port-udp-port-to-sendto-rcvfrom-set-this-value-to-the" class="headerlink" title="[port] udp port to sendto/rcvfrom (set this value to the"></a>[port] udp port to sendto/rcvfrom (set this value to the</h1><h1 id="same-value-as-“udpport”-above"><a href="#same-value-as-“udpport”-above" class="headerlink" title="same value as “udpport” above)"></a>same value as “udpport” above)</h1><h1 id="ttl-the-ttl-value-for-outbound-heartbeats-this-effects"><a href="#ttl-the-ttl-value-for-outbound-heartbeats-this-effects" class="headerlink" title="[ttl] the ttl value for outbound heartbeats. this effects"></a>[ttl] the ttl value for outbound heartbeats. this effects</h1><h1 id="how-far-the-multicast-packet-will-propagate-0-255"><a href="#how-far-the-multicast-packet-will-propagate-0-255" class="headerlink" title="how far the multicast packet will propagate. (0-255)"></a>how far the multicast packet will propagate. (0-255)</h1><h1 id="Must-be-greater-than-zero"><a href="#Must-be-greater-than-zero" class="headerlink" title="Must be greater than zero."></a>Must be greater than zero.</h1><h1 id="loop-toggles-loopback-for-outbound-multicast-heartbeats"><a href="#loop-toggles-loopback-for-outbound-multicast-heartbeats" class="headerlink" title="[loop] toggles loopback for outbound multicast heartbeats."></a>[loop] toggles loopback for outbound multicast heartbeats.</h1><h1 id="if-enabled-an-outbound-packet-will-be-looped-back-and"><a href="#if-enabled-an-outbound-packet-will-be-looped-back-and" class="headerlink" title="if enabled, an outbound packet will be looped back and"></a>if enabled, an outbound packet will be looped back and</h1><h1 id="received-by-the-interface-it-was-sent-on-0-or-1"><a href="#received-by-the-interface-it-was-sent-on-0-or-1" class="headerlink" title="received by the interface it was sent on. (0 or 1)"></a>received by the interface it was sent on. (0 or 1)</h1><h1 id="Set-this-value-to-zero"><a href="#Set-this-value-to-zero" class="headerlink" title="Set this value to zero."></a>Set this value to zero.</h1></blockquote>
+<p>node node1.richie.com 定义两个节点<br>node node2.richie.com</p>
+<p>ping 172.31.4.1 指定一个ping节点，一般指向网关</p>
+<p>这些信息就够了，:wq保存退出</p>
+<p>4.2 配置/etc/ha.d/authkeys</p>
+<p>先生成一段随机码：</p>
+<p>openssl rand -hex 8</p>
+<p>然后复制到/etc/ha.d/authkeys内</p>
+<p>auth 2</p>
+<p>2 sha1 随机码</p>
+<p>:wq保存退出</p>
+<p>4.3 配置/etc/ha.d/haresources</p>
+<p>定义两条资源，ip和httpd服务</p>
+<p>node1.richie.com 172.31.4.229/24/eth0/172.16.255.255 httpd</p>
+<p>#确保/etc/init.d下面有httpd同名脚本</p>
+<p>配置文件就编辑好了， 传给node2</p>
+<p>scp –p ha.cf haresources authkeys node2:/etc/ha.d</p>
+<p>准备httpd服务</p>
+<p>node1:</p>
+<p>yum install httpd –y</p>
+<p>创建一个测试页面</p>
+<p>vi /var/www/html/index.html</p>
+<blockquote>
+<h1 id="node1-richie-com"><a href="#node1-richie-com" class="headerlink" title="node1.richie.com"></a>node1.richie.com</h1></blockquote>
+<p>一定确保httpd服务不能开机自启</p>
+<p>chkconfig httpd off</p>
+<p>node2:</p>
+<p>node1:</p>
+<p>yum install httpd –y</p>
+<p>创建一个测试页面</p>
+<p>vi /var/www/html/index.html</p>
+<blockquote>
+<h1 id="node1-richie-com-1"><a href="#node1-richie-com-1" class="headerlink" title="node1.richie.com"></a>node1.richie.com</h1></blockquote>
+<p>chkconfig httpd off</p>
+<p>5. 启动heartbeat服务</p>
+<p>node1:</p>
+<p>service heartbeat start</p>
+<p>ssh node2 ‘service heartbeat start’</p>
+<p>稍等片刻，应该可以看到node1上</p>
+<p>eth0:0 Link encap:Ethernet HWaddr 00:0C:29:AE:A7:FB<br>inet addr:172.31.4.229 Bcast:172.16.255.255 Mask:255.255.255.0<br>UP BROADCAST RUNNING MULTICAST MTU:1500 Metric:1</p>
+<p>访问VIP： <a href="http://172.31.4.229" target="_blank" rel="external">http://172.31.4.229</a> ..ok</p>
+<p><a href="zb_users/upload/2015/10/56287faccb3cb737493594.png"><img src="zb_users/upload/2015/10/56287fb01da0a607143342.png" alt="image"></a></p>
+<p>然后测试，将node1的heartbeat停掉，看是否会自动迁移VIP和httpd服务到node2</p>
+<p><a href="zb_users/upload/2015/10/56287fb0adc15724800655.png"><img src="zb_users/upload/2015/10/56287fb3240e0734083851.png" alt="image"></a></p>
+<p>ok，试验成功。</p>
+<p>除此之外，节点的资源上下线可以使用命令：</p>
+<p>/usr/lib64/heartbeat/hb_standby 主动卸载资源</p>
+<p>/usr/lib64/heartbeat/hb_takeover 主动抢夺资源</p>
+<p>/usr/lib64/heartbeat/ha_propagate 自动实现通告给node2，并自动复制配置文件，不需要在手动scp来复制了</p>
+<p>附：</p>
+<p>ha.cf配置文件部分参数详解：</p>
+<p>autojoin none  </p>
+<p>#集群中的节点不会自动加入<br>logfile /var/log/ha-log  </p>
+<p>#指名heartbaet的日志存放位置<br>keepalive 2  </p>
+<p>#指定心跳使用间隔时间为2秒（即每两秒钟在eth1上发送一次广播）<br>deadtime 30  </p>
+<p>#指定备用节点在30秒内没有收到主节点的心跳信号后，则立即接管主节点的服务资源<br>warntime 10  </p>
+<p>#指定心跳延迟的时间为十秒。当10秒钟内备份节点不能接收到主节点的心跳信号时，就会往日志中写入一个警告日志，但此时不会切换服务<br>initdead 120  </p>
+<p>#在某些系统上，系统启动或重启之后需要经过一段时间网络才能正常工作，该选项用于解决这种情况产生的时间间隔。取值至少为deadtime的两倍。  </p>
+<p>udpport 694  </p>
+<p>#设置广播通信使用的端口，694为默认使用的端口号。<br>baud 19200  </p>
+<p>#设置串行通信的波特率  </p>
+<p>#bcast eth0  </p>
+<h1 id="Linux-指明心跳使用以太网广播方式，并且是在eth0接口上进行广播。"><a href="#Linux-指明心跳使用以太网广播方式，并且是在eth0接口上进行广播。" class="headerlink" title="Linux 指明心跳使用以太网广播方式，并且是在eth0接口上进行广播。"></a>Linux 指明心跳使用以太网广播方式，并且是在eth0接口上进行广播。</h1><p>#mcast eth0 225.0.0.1 694 1 0  </p>
+<p>#采用网卡eth0的Udp多播来组织心跳，一般在备用节点不止一台时使用。Bcast、ucast和mcast分别代表广播、单播和多播，是组织心跳的三种方式，任选其一即可。  </p>
+<p>#ucast eth0 192.168.1.2  </p>
+<p>#采用网卡eth0的udp单播来组织心跳，后面跟的IP地址应为双机对方的IP地址<br>auto_failback on  </p>
+<p>#用来定义当主节点恢复后，是否将服务自动切回，heartbeat的两台主机分别为主节点和备份节点。主节点在正常情况下占用资源并运行所有的服务，遇到故障时把资源交给备份节点并由备份节点运行服务。在该选项设为on的情况下，一旦主节点恢复运行，则自动获取资源并取代备份节点，如果该选项设置为off，那么当主节点恢复后，将变为备份节点，而原来的备份节点成为主节点  </p>
+<p>#stonith baytech /etc/ha.d/conf/stonith.baytech  </p>
+<h1 id="stonith的主要作用是使出现问题的节点从集群环境中脱离，进而释放集群资源，避免两个节点争用一个资源的情形发生。保证共享数据的安全性和完整性。"><a href="#stonith的主要作用是使出现问题的节点从集群环境中脱离，进而释放集群资源，避免两个节点争用一个资源的情形发生。保证共享数据的安全性和完整性。" class="headerlink" title="stonith的主要作用是使出现问题的节点从集群环境中脱离，进而释放集群资源，避免两个节点争用一个资源的情形发生。保证共享数据的安全性和完整性。"></a>stonith的主要作用是使出现问题的节点从集群环境中脱离，进而释放集群资源，避免两个节点争用一个资源的情形发生。保证共享数据的安全性和完整性。</h1><p>#watchdog /dev/watchdog  </p>
+<p>#该选项是可选配置，是通过Heartbeat来监控系统的运行状态。使用该特性，需要在内核中载入”softdog”内核模块，用来生成实际的设备文件，如果系统中没有这个内核模块，就需要指定此模块，重新编译内核。编译完成输入”insmod<br>softdog”加载该模块。然后输入”grep misc /proc/devices”(应为10)，输入”cat /proc/misc |grep<br>watchdog”(应为130)。最后，生成设备文件：”mknod /dev/watchdog c 10 130” 。即可使用此功能<br>node node1.magedu.com  </p>
+<p>#主节点主机名，可以通过命令“uname –n”查看。<br>node node2.magedu.com  </p>
+<p>#备用节点主机名<br>ping 192.168.12.237  </p>
+<p>#选择ping的节点，ping<br>节点选择的越好，HA集群就越强壮，可以选择固定的路由器作为ping节点，但是最好不要选择集群中的成员作为ping节点，ping节点仅仅用来测试网络连接<br>ping_group group1 192.168.12.120 192.168.12.237  </p>
+<p>#类似于ping ping一组ip地址<br>apiauth pingd gid=haclient uid=hacluster<br>respawn hacluster /usr/local/ha/lib/heartbeat/pingd -m 100 -d 5s  </p>
+<p>#该选项是可选配置，列出与heartbeat一起启动和关闭的进程，该进程一般是和heartbeat集成的插件，这些进程遇到故障可以自动重新启动。最常用的进程是pingd，此进程用于检测和监控网卡状态，需要配合ping语句指定的ping<br>node来检测网络的连通性。其中hacluster表示启动pingd进程的身份。  </p>
+<p>#下面的配置是关键，也就是激活crm管理，开始使用v2 style格式  </p>
+<h1 id="crm-respawn"><a href="#crm-respawn" class="headerlink" title="crm respawn"></a>crm respawn</h1><p>#注意，还可以使用crm yes的写法，但这样写的话，如果后面的cib.xml配置有问题  </p>
+<p>#会导致heartbeat直接重启该服务器，所以，测试时建议使用respawn的写法  </p>
+<p>#下面是对传输的数据进行压缩，是可选项<br>compression bz2<br>compression_threshold 2</p>
+<p>注意，v2 style不支持ipfail功能，须使用pingd代替</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
   <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/09/06/利用PowerShell查看远程计算机磁盘容量/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1926,238 +2182,6 @@ delete-LTMlog
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/06/24/DHCP服务介绍及Linux下DHCP服务的管理配置/">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="Richie Jing">
-    <meta itemprop="description" content="">
-    <meta itemprop="image" content="/images/avatar.gif">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="Richie's Personal Blog">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="Richie's Personal Blog" src="">
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2015/06/24/DHCP服务介绍及Linux下DHCP服务的管理配置/" itemprop="url">
-                  DHCP服务介绍及Linux下DHCP服务的管理配置
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2015-06-24T16:42:41+08:00">
-                2015-06-24
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>1. DHCP服务简介  </p>
-<p>DHCP是Dynamic Host Configuration<br>Protocol,动态主机配置协议，是用来在物理网络给主机分配ip地址的一种方式，区别于bootp，一次分配终身使用的缺点。</p>
-<p>DHCP提出的租约的概念，使得可以根据需要动态确定主机需要的IP地址，并且IP地址可以循环使用。</p>
-<p>2. DHCP结构</p>
-<p>DHCP是典型的C/S结构，需要服务端启动守护进程来保证来自client段的请求能被响应，DHCP的工作原理如下：</p>
-<p>可以通过DORA来记忆：</p>
-<p>Client: DHCP DISCOVER #客户端向相同网络发送广播包，企图寻找DHCP服务器</p>
-<p>Server: DHCP OFFER #如果DHCP服务段收到DISCOVER包，则向客户端回复OFFER广播包</p>
-<p>Client: DHCP REQUEST</p>
-<p>#客户端收到来自DHCP的OFFER广播包后，则确定DHCP服务器，继续向DHCP服务器发送REQUEST包，来申请ip信息</p>
-<p>Server: DHCP ACK #DHCP服务端向客户端发送ACK包，携带ip和租约信息给客户端， DHCP发现过程结束</p>
-<p>注意： dhcp在跨网段的路由器另一侧，则路由器需要开启dhcp<br>relay来支持转发客户端DISCOVER的广播包给DHCP服务器，这些通过路由器的转发，都是单播</p>
-<p>因为路由器和dhcp之间的连接是有ip信息的。</p>
-<p>DHCP服务端端口 UDP 67</p>
-<p>DHCP客户端端口 UDP 68</p>
-<p>DHCP reservation： 地址保留：</p>
-<p>专用于某特定客户端的地址，不应该使用地址池中的地址；优先于地址池中的地址；</p>
-<p>3. Linux下DHCP服务安装配置</p>
-<p>由于CentOS6/7的系统管理机制不同，所以开机自启动服务的方式有所不同，但是配置文件，帮助文档大同小异</p>
-<p>3.1 CentOS 6下 DHCP安装：</p>
-<p>#yum install dhcp</p>
-<p>#通过rpm -ql dhcp 来查询hdcp包所创建安装的文件，我们可以分析他的使用方式：</p>
-<p>这里列举几个比较重要的文件：</p>
-<p>#DHCP服务配置文件：</p>
-<p>/etc/dhcp/dhcpd.conf</p>
-<p>/etc/dhcp/dhcpd6.conf</p>
-<p>#服务脚本，控制dhcp服务的启动，关闭，状态查询，reload等</p>
-<p>/etc/rc.d/init.d/dhcpd</p>
-<p>/etc/rc.d/init.d/dhcpd6</p>
-<p>/etc/rc.d/init.d/dhcrelay</p>
-<p>/etc/rc.d/init.d/dhcrelay6</p>
-<p>#dhcp命令参数配置文件:<br>此文件内容提供一些区段给dhcpd守护进程在系统引导时使用，dhcpd守护进程使用DHCP及BOOTP协议为主机自动分配IP地址</p>
-<p>/etc/sysconfig/dhcpd</p>
-<p>/etc/sysconfig/dhcpd6</p>
-<p>/etc/sysconfig/dhcrelay</p>
-<p>/etc/sysconfig/dhcrelay6</p>
-<p>#dhcp二进制程序</p>
-<p>/usr/sbin/dhcpd</p>
-<p>/usr/sbin/dhcrelay</p>
-<p>#dhcp的ip地址租约库,可以查到ip分配情况</p>
-<p>/var/lib/dhcpd/dhcpd.leases</p>
-<p>/var/lib/dhcpd/dhcpd6.leases</p>
-<p>4.1 CentOS6下dhcp服务配置文件管理：</p>
-<p>4.1.1 首先编辑dhcp主配置文件：</p>
-<p>/etc/dhcp/dhcpd.conf</p>
-<p>option domain-name “richie.com”; #dhcp主机名</p>
-<p>option domain-name-servers 192.168.229.141; #名称服务器的地址</p>
-<p>default-lease-time 600; #默认租约秒数</p>
-<p>max-lease-time 7200; #最大租约秒数</p>
-<p>log-facility local7; #log级别</p>
-<p>subnet 192.168.229.0 netmask 255.255.255.0 {</p>
-<p>range 192.168.229.201 192.168.229.220; #可供分配的ip段</p>
-<p>option routers 192.168.229.1, 192.168.229.2; #如果在最近配置的option<br>routers那就直接饮用，如果没有，那就会自动继承上一级的option</p>
-<p>} #子网配置格式</p>
-<p>当编辑完，保存退出，可以使用这个命令来检测语法错误：</p>
-<p>service dhcpd configtest</p>
-<p>4.1.2 配置ip地址预留:</p>
-<p>需要在subnet {} 内部，配置host{}格式如下：</p>
-<p>subnet 192.168.229.0 netmask 255.255.255.0 {</p>
-<p>host windows1 {</p>
-<p>hardware ethernet 00:0c:29:0:f3:44;</p>
-<p>fixed-address 192.168.229.222;</p>
-<p>option routers 192.168.0.1 #这里可以针对这台机器设置option routers的值，而不用继承上一级的网关信息</p>
-<p>}</p>
-<p>}</p>
-<p>最后，保存退出</p>
-<p>service dhcpd force-reload</p>
-<p>测试效果：</p>
-<p>linux client:</p>
-<p>dhclient -d eth0</p>
-<p>window client:</p>
-<p>ipconfig /renew</p>
-<p>4.1.3 配置开机自启动：</p>
-<p>还是老命令chkconfig dhcpd on, 默认会将init级别2,3,4,5都设置为开机自启动， 也可以使用 chkconfig –level<br>2,3,4 来自己指定需要的运行级别自启</p>
-<p>4.1.4 管理dhcp服务</p>
-<p>service dhcpd {start|stop|restart|force-reload|condrestart|try-<br>restart|configtest|status}</p>
-<p>4.2 CentOS 7下的DHCP服务管理</p>
-<p>4.2.1 配置文件：</p>
-<p>同CentOS6上的配置，参见4.1.1</p>
-<p>4.2.2 配置ip地址预留:</p>
-<p>同CentOS6上的配置，参见4.1.2</p>
-<p>4.2.3 配置开机自启动：</p>
-<p>由于CentOS6/7的系统服务管理机制的不同，CentOS7引入了systemd来管理所有的服务，所以不能再使用chkconfig命令来设置，需要使用：</p>
-<h1 id="systemctl-is-enabled-DAEMON-service-查看dhcp服务状态，-相当于C5的-chkconfig-–list"><a href="#systemctl-is-enabled-DAEMON-service-查看dhcp服务状态，-相当于C5的-chkconfig-–list" class="headerlink" title="systemctl is-enabled DAEMON.service 查看dhcp服务状态， 相当于C5的 chkconfig –list"></a>systemctl is-enabled DAEMON.service 查看dhcp服务状态， 相当于C5的 chkconfig –list</h1><p>dhcpd</p>
-<h1 id="systemctl-enable-DAEMON-service-启用开机自启动dhcp服务-相当于C5的-chkconfig-dhcpd-on"><a href="#systemctl-enable-DAEMON-service-启用开机自启动dhcp服务-相当于C5的-chkconfig-dhcpd-on" class="headerlink" title="systemctl enable DAEMON.service 启用开机自启动dhcp服务, 相当于C5的 chkconfig dhcpd on"></a>systemctl enable DAEMON.service 启用开机自启动dhcp服务, 相当于C5的 chkconfig dhcpd on</h1><h1 id="systemctl-disable-DAEMON-service-禁用开机自启动dhcp服务-相当于C5的-chkconfig-dhcpd-off"><a href="#systemctl-disable-DAEMON-service-禁用开机自启动dhcp服务-相当于C5的-chkconfig-dhcpd-off" class="headerlink" title="systemctl disable DAEMON.service 禁用开机自启动dhcp服务, 相当于C5的 chkconfig dhcpd off"></a>systemctl disable DAEMON.service 禁用开机自启动dhcp服务, 相当于C5的 chkconfig dhcpd off</h1><p>4.2.4 管理dhcp服务</p>
-<h1 id="systemctl-start-stop-restart-status-DAEMON-service"><a href="#systemctl-start-stop-restart-status-DAEMON-service" class="headerlink" title="systemctl {start|stop|restart|status} DAEMON.service"></a>systemctl {start|stop|restart|status} DAEMON.service</h1><p>5. DHCP配置命令总结</p>
-<p>一个简单dhcp服务的配置文件至少需要包含如下的配置信息：</p>
-<p>dhcpd.conf</p>
-<p>option domain-name</p>
-<p>option domain-name-servers</p>
-<p>option routers</p>
-<p>subnet NETWORK netmask MASK {</p>
-<p>range START_IP END_IP;</p>
-<p>host HOSTID {</p>
-<p>hardware ethernet 00:11:22:33:44:55;</p>
-<p>fixed-address IP;</p>
-<p>}</p>
-<p>}</p>
-<p>========================================================</p>
-<p>例子：</p>
-<p>dhcpd.conf</p>
-<p>option domain-name “richie.com”;</p>
-<p>option domain-name-servers 192.168.229.141;</p>
-<p>default-lease-time 600;</p>
-<p>max-lease-time 7200;</p>
-<p>log-facility local7;</p>
-<p>subnet 192.168.229.0 netmask 255.255.255.0 {</p>
-<p>range 192.168.229.201 192.168.229.220;</p>
-<p>option routers 192.168.229.1, 192.168.229.2;</p>
-<p>host windows1 {</p>
-<p>hardware ethernet 00:0c:29:30:f3:44;</p>
-<p>fixed-address 192.168.229.211;</p>
-<p>}</p>
-<p>}</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2205,7 +2229,7 @@ delete-LTMlog
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">81</span>
+                <span class="site-state-item-count">82</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -2216,7 +2240,7 @@ delete-LTMlog
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-count">11</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
