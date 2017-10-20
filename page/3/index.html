@@ -1,20 +1,31 @@
-<!doctype html>
+<!DOCTYPE html>
 
 
 
   
 
 
-<html class="theme-next pisces use-motion" lang="zh-Hans">
+<html class="theme-next muse use-motion" lang="zh-Hans">
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
 
 
 
 <meta http-equiv="Cache-Control" content="no-transform" />
 <meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
 
 
 
@@ -34,38 +45,27 @@
 
 
 
-  
-  
-  
-  
-
-  
-    
-    
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-    
-    
-    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
-  
-
-
-
 
 
 
 <link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
 
-<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
 
 
   <meta name="keywords" content="Hexo, NexT" />
@@ -73,11 +73,6 @@
 
 
 
-
-
-
-
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
 
 
 
@@ -100,10 +95,12 @@
   var NexT = window.NexT || {};
   var CONFIG = {
     root: '/',
-    scheme: 'Pisces',
-    sidebar: {"position":"left","display":"post"},
+    scheme: 'Muse',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
     fancybox: true,
-    motion: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     duoshuo: {
       userId: '0',
       author: '博主'
@@ -126,54 +123,53 @@
 
 
 
-  <title> Richie's Personal Blog </title>
+  <title>Richie's Personal Blog</title>
+  
+
+
+
+
+
+
+
+
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
 
   
-
-
-
-
-
-
-
-
-
-
-  
   
     
   
 
-  <div class="container one-collumn sidebar-position-left 
-   page-home 
- ">
+  <div class="container sidebar-position-left 
+  page-home">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-meta ">
-  
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
 
-  <div class="custom-logo-site-title">
-    <a href="/"  class="brand" rel="start">
-      <span class="logo-line-before"><i></i></span>
-      <span class="site-title">Richie's Personal Blog</span>
-      <span class="logo-line-after"><i></i></span>
-    </a>
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Richie's Personal Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Life is short, do something meaningful!</p>
+      
   </div>
-    
-      <p class="site-subtitle">Life is short, do something meaningful!</p>
-    
-</div>
 
-<div class="site-nav-toggle">
-  <button>
-    <span class="btn-bar"></span>
-    <span class="btn-bar"></span>
-    <span class="btn-bar"></span>
-  </button>
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
 </div>
 
 <nav class="site-nav">
@@ -194,21 +190,11 @@
       
         
         <li class="menu-item menu-item-archives">
-          <a href="/archives" rel="section">
+          <a href="/archives/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
             归档
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-tags">
-          <a href="/tags" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
-            
-            标签
           </a>
         </li>
       
@@ -240,21 +226,22 @@
   
   
 
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/01/08/快速找出System.Management.Automation.dll的位置/">
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/01/08/快速找出System.Management.Automation.dll的位置/">
 
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="Richie Jing">
-    <meta itemprop="description" content="">
-    <meta itemprop="image" content="/images/avatar.gif">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="Richie's Personal Blog">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="Richie's Personal Blog" src="">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Richie Jing">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://oxk9rl21s.bkt.clouddn.com/logo.jfif">
     </span>
-  </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Richie's Personal Blog">
+    </span>
 
     
       <header class="post-header">
@@ -262,16 +249,8 @@
         
         
           <h1 class="post-title" itemprop="name headline">
-            
-            
-              
                 
-                <a class="post-title-link" href="/2016/01/08/快速找出System.Management.Automation.dll的位置/" itemprop="url">
-                  快速找出System.Management.Automation.dll的位置
-                </a>
-              
-            
-          </h1>
+                <a class="post-title-link" href="/2016/01/08/快速找出System.Management.Automation.dll的位置/" itemprop="url">快速找出System.Management.Automation.dll的位置</a></h1>
         
 
         <div class="post-meta">
@@ -283,7 +262,7 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-01-08T09:52:46+08:00">
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-01-08T09:52:46+08:00">
                 2016-01-08
               </time>
             
@@ -300,8 +279,8 @@
           
 
           
-
           
+
           
 
           
@@ -312,7 +291,9 @@
       </header>
     
 
-
+    
+    
+    
     <div class="post-body" itemprop="articleBody">
 
       
@@ -329,17 +310,19 @@
         
       
     </div>
+    
+    
+    
 
-    <div>
-      
-    </div>
+    
 
-    <div>
-      
-    </div>
+    
 
+    
 
     <footer class="post-footer">
+      
+
       
 
       
@@ -349,6 +332,10 @@
         <div class="post-eof"></div>
       
     </footer>
+  </div>
+  
+  
+  
   </article>
 
 
@@ -361,21 +348,22 @@
   
   
 
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/10/22/基于heartbeat v2 crm实现配置基于nfs的mysql HA集群/">
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/10/22/基于heartbeat v2 crm实现配置基于nfs的mysql HA集群/">
 
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="Richie Jing">
-    <meta itemprop="description" content="">
-    <meta itemprop="image" content="/images/avatar.gif">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="Richie's Personal Blog">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="Richie's Personal Blog" src="">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Richie Jing">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://oxk9rl21s.bkt.clouddn.com/logo.jfif">
     </span>
-  </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Richie's Personal Blog">
+    </span>
 
     
       <header class="post-header">
@@ -383,16 +371,8 @@
         
         
           <h1 class="post-title" itemprop="name headline">
-            
-            
-              
                 
-                <a class="post-title-link" href="/2015/10/22/基于heartbeat v2 crm实现配置基于nfs的mysql HA集群/" itemprop="url">
-                  基于heartbeat v2 crm实现配置基于nfs的mysql HA集群
-                </a>
-              
-            
-          </h1>
+                <a class="post-title-link" href="/2015/10/22/基于heartbeat v2 crm实现配置基于nfs的mysql HA集群/" itemprop="url">基于heartbeat v2 crm实现配置基于nfs的mysql HA集群</a></h1>
         
 
         <div class="post-meta">
@@ -404,7 +384,7 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2015-10-22T20:17:14+08:00">
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-10-22T20:17:14+08:00">
                 2015-10-22
               </time>
             
@@ -421,8 +401,8 @@
           
 
           
-
           
+
           
 
           
@@ -433,7 +413,9 @@
       </header>
     
 
-
+    
+    
+    
     <div class="post-body" itemprop="articleBody">
 
       
@@ -541,17 +523,19 @@
         
       
     </div>
+    
+    
+    
 
-    <div>
-      
-    </div>
+    
 
-    <div>
-      
-    </div>
+    
 
+    
 
     <footer class="post-footer">
+      
+
       
 
       
@@ -561,6 +545,10 @@
         <div class="post-eof"></div>
       
     </footer>
+  </div>
+  
+  
+  
   </article>
 
 
@@ -573,21 +561,22 @@
   
   
 
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/10/22/基于heartbeat v1 实现基础的httpd高可用集群/">
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/10/22/基于heartbeat v1 实现基础的httpd高可用集群/">
 
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="Richie Jing">
-    <meta itemprop="description" content="">
-    <meta itemprop="image" content="/images/avatar.gif">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="Richie's Personal Blog">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="Richie's Personal Blog" src="">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Richie Jing">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://oxk9rl21s.bkt.clouddn.com/logo.jfif">
     </span>
-  </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Richie's Personal Blog">
+    </span>
 
     
       <header class="post-header">
@@ -595,16 +584,8 @@
         
         
           <h1 class="post-title" itemprop="name headline">
-            
-            
-              
                 
-                <a class="post-title-link" href="/2015/10/22/基于heartbeat v1 实现基础的httpd高可用集群/" itemprop="url">
-                  基于heartbeat v1 实现基础的httpd高可用集群
-                </a>
-              
-            
-          </h1>
+                <a class="post-title-link" href="/2015/10/22/基于heartbeat v1 实现基础的httpd高可用集群/" itemprop="url">基于heartbeat v1 实现基础的httpd高可用集群</a></h1>
         
 
         <div class="post-meta">
@@ -616,7 +597,7 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2015-10-22T14:19:51+08:00">
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-10-22T14:19:51+08:00">
                 2015-10-22
               </time>
             
@@ -633,8 +614,8 @@
           
 
           
-
           
+
           
 
           
@@ -645,7 +626,9 @@
       </header>
     
 
-
+    
+    
+    
     <div class="post-body" itemprop="articleBody">
 
       
@@ -797,17 +780,19 @@ release-6-8.noarch.rpm</a></p>
         
       
     </div>
+    
+    
+    
 
-    <div>
-      
-    </div>
+    
 
-    <div>
-      
-    </div>
+    
 
+    
 
     <footer class="post-footer">
+      
+
       
 
       
@@ -817,6 +802,10 @@ release-6-8.noarch.rpm</a></p>
         <div class="post-eof"></div>
       
     </footer>
+  </div>
+  
+  
+  
   </article>
 
 
@@ -829,21 +818,22 @@ release-6-8.noarch.rpm</a></p>
   
   
 
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/09/06/利用PowerShell查看远程计算机磁盘容量/">
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/09/06/利用PowerShell查看远程计算机磁盘容量/">
 
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="Richie Jing">
-    <meta itemprop="description" content="">
-    <meta itemprop="image" content="/images/avatar.gif">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="Richie's Personal Blog">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="Richie's Personal Blog" src="">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Richie Jing">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://oxk9rl21s.bkt.clouddn.com/logo.jfif">
     </span>
-  </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Richie's Personal Blog">
+    </span>
 
     
       <header class="post-header">
@@ -851,16 +841,8 @@ release-6-8.noarch.rpm</a></p>
         
         
           <h1 class="post-title" itemprop="name headline">
-            
-            
-              
                 
-                <a class="post-title-link" href="/2015/09/06/利用PowerShell查看远程计算机磁盘容量/" itemprop="url">
-                  利用PowerShell查看远程计算机磁盘容量
-                </a>
-              
-            
-          </h1>
+                <a class="post-title-link" href="/2015/09/06/利用PowerShell查看远程计算机磁盘容量/" itemprop="url">利用PowerShell查看远程计算机磁盘容量</a></h1>
         
 
         <div class="post-meta">
@@ -872,7 +854,7 @@ release-6-8.noarch.rpm</a></p>
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2015-09-06T13:02:51+08:00">
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-09-06T13:02:51+08:00">
                 2015-09-06
               </time>
             
@@ -889,8 +871,8 @@ release-6-8.noarch.rpm</a></p>
           
 
           
-
           
+
           
 
           
@@ -901,7 +883,9 @@ release-6-8.noarch.rpm</a></p>
       </header>
     
 
-
+    
+    
+    
     <div class="post-body" itemprop="articleBody">
 
       
@@ -917,17 +901,19 @@ release-6-8.noarch.rpm</a></p>
         
       
     </div>
+    
+    
+    
 
-    <div>
-      
-    </div>
+    
 
-    <div>
-      
-    </div>
+    
 
+    
 
     <footer class="post-footer">
+      
+
       
 
       
@@ -937,6 +923,10 @@ release-6-8.noarch.rpm</a></p>
         <div class="post-eof"></div>
       
     </footer>
+  </div>
+  
+  
+  
   </article>
 
 
@@ -949,21 +939,22 @@ release-6-8.noarch.rpm</a></p>
   
   
 
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/07/30/使用powershell远程重启带依赖项服务/">
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/07/30/使用powershell远程重启带依赖项服务/">
 
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="Richie Jing">
-    <meta itemprop="description" content="">
-    <meta itemprop="image" content="/images/avatar.gif">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="Richie's Personal Blog">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="Richie's Personal Blog" src="">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Richie Jing">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://oxk9rl21s.bkt.clouddn.com/logo.jfif">
     </span>
-  </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Richie's Personal Blog">
+    </span>
 
     
       <header class="post-header">
@@ -971,16 +962,8 @@ release-6-8.noarch.rpm</a></p>
         
         
           <h1 class="post-title" itemprop="name headline">
-            
-            
-              
                 
-                <a class="post-title-link" href="/2015/07/30/使用powershell远程重启带依赖项服务/" itemprop="url">
-                  使用powershell远程重启带依赖项服务
-                </a>
-              
-            
-          </h1>
+                <a class="post-title-link" href="/2015/07/30/使用powershell远程重启带依赖项服务/" itemprop="url">使用powershell远程重启带依赖项服务</a></h1>
         
 
         <div class="post-meta">
@@ -992,7 +975,7 @@ release-6-8.noarch.rpm</a></p>
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2015-07-30T20:31:44+08:00">
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-07-30T20:31:44+08:00">
                 2015-07-30
               </time>
             
@@ -1009,8 +992,8 @@ release-6-8.noarch.rpm</a></p>
           
 
           
-
           
+
           
 
           
@@ -1021,7 +1004,9 @@ release-6-8.noarch.rpm</a></p>
       </header>
     
 
-
+    
+    
+    
     <div class="post-body" itemprop="articleBody">
 
       
@@ -1040,17 +1025,19 @@ release-6-8.noarch.rpm</a></p>
         
       
     </div>
+    
+    
+    
 
-    <div>
-      
-    </div>
+    
 
-    <div>
-      
-    </div>
+    
 
+    
 
     <footer class="post-footer">
+      
+
       
 
       
@@ -1060,6 +1047,10 @@ release-6-8.noarch.rpm</a></p>
         <div class="post-eof"></div>
       
     </footer>
+  </div>
+  
+  
+  
   </article>
 
 
@@ -1072,21 +1063,22 @@ release-6-8.noarch.rpm</a></p>
   
   
 
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/07/25/nfs基本应用之httpd+nfs负载均衡实验/">
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/07/25/nfs基本应用之httpd+nfs负载均衡实验/">
 
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="Richie Jing">
-    <meta itemprop="description" content="">
-    <meta itemprop="image" content="/images/avatar.gif">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="Richie's Personal Blog">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="Richie's Personal Blog" src="">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Richie Jing">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://oxk9rl21s.bkt.clouddn.com/logo.jfif">
     </span>
-  </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Richie's Personal Blog">
+    </span>
 
     
       <header class="post-header">
@@ -1094,16 +1086,8 @@ release-6-8.noarch.rpm</a></p>
         
         
           <h1 class="post-title" itemprop="name headline">
-            
-            
-              
                 
-                <a class="post-title-link" href="/2015/07/25/nfs基本应用之httpd+nfs负载均衡实验/" itemprop="url">
-                  nfs基本应用之httpd+nfs负载均衡实验
-                </a>
-              
-            
-          </h1>
+                <a class="post-title-link" href="/2015/07/25/nfs基本应用之httpd+nfs负载均衡实验/" itemprop="url">nfs基本应用之httpd+nfs负载均衡实验</a></h1>
         
 
         <div class="post-meta">
@@ -1115,7 +1099,7 @@ release-6-8.noarch.rpm</a></p>
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2015-07-25T19:32:48+08:00">
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-07-25T19:32:48+08:00">
                 2015-07-25
               </time>
             
@@ -1132,8 +1116,8 @@ release-6-8.noarch.rpm</a></p>
           
 
           
-
           
+
           
 
           
@@ -1144,7 +1128,9 @@ release-6-8.noarch.rpm</a></p>
       </header>
     
 
-
+    
+    
+    
     <div class="post-body" itemprop="articleBody">
 
       
@@ -1338,17 +1324,19 @@ release-6-8.noarch.rpm</a></p>
         
       
     </div>
+    
+    
+    
 
-    <div>
-      
-    </div>
+    
 
-    <div>
-      
-    </div>
+    
 
+    
 
     <footer class="post-footer">
+      
+
       
 
       
@@ -1358,6 +1346,10 @@ release-6-8.noarch.rpm</a></p>
         <div class="post-eof"></div>
       
     </footer>
+  </div>
+  
+  
+  
   </article>
 
 
@@ -1370,21 +1362,22 @@ release-6-8.noarch.rpm</a></p>
   
   
 
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/07/10/TCP及socket通信原理/">
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/07/10/TCP及socket通信原理/">
 
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="Richie Jing">
-    <meta itemprop="description" content="">
-    <meta itemprop="image" content="/images/avatar.gif">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="Richie's Personal Blog">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="Richie's Personal Blog" src="">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Richie Jing">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://oxk9rl21s.bkt.clouddn.com/logo.jfif">
     </span>
-  </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Richie's Personal Blog">
+    </span>
 
     
       <header class="post-header">
@@ -1392,16 +1385,8 @@ release-6-8.noarch.rpm</a></p>
         
         
           <h1 class="post-title" itemprop="name headline">
-            
-            
-              
                 
-                <a class="post-title-link" href="/2015/07/10/TCP及socket通信原理/" itemprop="url">
-                  TCP及socket通信原理
-                </a>
-              
-            
-          </h1>
+                <a class="post-title-link" href="/2015/07/10/TCP及socket通信原理/" itemprop="url">TCP及socket通信原理</a></h1>
         
 
         <div class="post-meta">
@@ -1413,7 +1398,7 @@ release-6-8.noarch.rpm</a></p>
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2015-07-10T15:16:08+08:00">
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-07-10T15:16:08+08:00">
                 2015-07-10
               </time>
             
@@ -1430,8 +1415,8 @@ release-6-8.noarch.rpm</a></p>
           
 
           
-
           
+
           
 
           
@@ -1442,7 +1427,9 @@ release-6-8.noarch.rpm</a></p>
       </header>
     
 
-
+    
+    
+    
     <div class="post-body" itemprop="articleBody">
 
       
@@ -1553,17 +1540,19 @@ release-6-8.noarch.rpm</a></p>
         
       
     </div>
+    
+    
+    
 
-    <div>
-      
-    </div>
+    
 
-    <div>
-      
-    </div>
+    
 
+    
 
     <footer class="post-footer">
+      
+
       
 
       
@@ -1573,6 +1562,10 @@ release-6-8.noarch.rpm</a></p>
         <div class="post-eof"></div>
       
     </footer>
+  </div>
+  
+  
+  
   </article>
 
 
@@ -1585,21 +1578,22 @@ release-6-8.noarch.rpm</a></p>
   
   
 
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/07/10/bind9简单安装配置及高级应用  --赶进度，未完成/">
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/07/10/bind9简单安装配置及高级应用  --赶进度，未完成/">
 
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="Richie Jing">
-    <meta itemprop="description" content="">
-    <meta itemprop="image" content="/images/avatar.gif">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="Richie's Personal Blog">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="Richie's Personal Blog" src="">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Richie Jing">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://oxk9rl21s.bkt.clouddn.com/logo.jfif">
     </span>
-  </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Richie's Personal Blog">
+    </span>
 
     
       <header class="post-header">
@@ -1607,16 +1601,8 @@ release-6-8.noarch.rpm</a></p>
         
         
           <h1 class="post-title" itemprop="name headline">
-            
-            
-              
                 
-                <a class="post-title-link" href="/2015/07/10/bind9简单安装配置及高级应用  --赶进度，未完成/" itemprop="url">
-                  bind9简单安装配置及高级应用  --赶进度，未完成
-                </a>
-              
-            
-          </h1>
+                <a class="post-title-link" href="/2015/07/10/bind9简单安装配置及高级应用  --赶进度，未完成/" itemprop="url">bind9简单安装配置及高级应用  --赶进度，未完成</a></h1>
         
 
         <div class="post-meta">
@@ -1628,7 +1614,7 @@ release-6-8.noarch.rpm</a></p>
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2015-07-10T09:30:13+08:00">
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-07-10T09:30:13+08:00">
                 2015-07-10
               </time>
             
@@ -1645,8 +1631,8 @@ release-6-8.noarch.rpm</a></p>
           
 
           
-
           
+
           
 
           
@@ -1657,7 +1643,9 @@ release-6-8.noarch.rpm</a></p>
       </header>
     
 
-
+    
+    
+    
     <div class="post-body" itemprop="articleBody">
 
       
@@ -1687,17 +1675,19 @@ release-6-8.noarch.rpm</a></p>
         
       
     </div>
+    
+    
+    
 
-    <div>
-      
-    </div>
+    
 
-    <div>
-      
-    </div>
+    
 
+    
 
     <footer class="post-footer">
+      
+
       
 
       
@@ -1707,6 +1697,10 @@ release-6-8.noarch.rpm</a></p>
         <div class="post-eof"></div>
       
     </footer>
+  </div>
+  
+  
+  
   </article>
 
 
@@ -1719,21 +1713,22 @@ release-6-8.noarch.rpm</a></p>
   
   
 
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/07/05/CentOS6上DNS服务器的安装配置-基础篇/">
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/07/05/CentOS6上DNS服务器的安装配置-基础篇/">
 
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="Richie Jing">
-    <meta itemprop="description" content="">
-    <meta itemprop="image" content="/images/avatar.gif">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="Richie's Personal Blog">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="Richie's Personal Blog" src="">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Richie Jing">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://oxk9rl21s.bkt.clouddn.com/logo.jfif">
     </span>
-  </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Richie's Personal Blog">
+    </span>
 
     
       <header class="post-header">
@@ -1741,16 +1736,8 @@ release-6-8.noarch.rpm</a></p>
         
         
           <h1 class="post-title" itemprop="name headline">
-            
-            
-              
                 
-                <a class="post-title-link" href="/2015/07/05/CentOS6上DNS服务器的安装配置-基础篇/" itemprop="url">
-                  CentOS6上DNS服务器的安装配置-基础篇
-                </a>
-              
-            
-          </h1>
+                <a class="post-title-link" href="/2015/07/05/CentOS6上DNS服务器的安装配置-基础篇/" itemprop="url">CentOS6上DNS服务器的安装配置-基础篇</a></h1>
         
 
         <div class="post-meta">
@@ -1762,7 +1749,7 @@ release-6-8.noarch.rpm</a></p>
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2015-07-05T21:44:28+08:00">
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-07-05T21:44:28+08:00">
                 2015-07-05
               </time>
             
@@ -1779,8 +1766,8 @@ release-6-8.noarch.rpm</a></p>
           
 
           
-
           
+
           
 
           
@@ -1791,7 +1778,9 @@ release-6-8.noarch.rpm</a></p>
       </header>
     
 
-
+    
+    
+    
     <div class="post-body" itemprop="articleBody">
 
       
@@ -1903,17 +1892,19 @@ recurse.jpg"></p>
         
       
     </div>
+    
+    
+    
 
-    <div>
-      
-    </div>
+    
 
-    <div>
-      
-    </div>
+    
 
+    
 
     <footer class="post-footer">
+      
+
       
 
       
@@ -1923,6 +1914,10 @@ recurse.jpg"></p>
         <div class="post-eof"></div>
       
     </footer>
+  </div>
+  
+  
+  
   </article>
 
 
@@ -1935,21 +1930,22 @@ recurse.jpg"></p>
   
   
 
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/07/02/CentOS6下ssh简介及openssh的应用/">
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/07/02/CentOS6下ssh简介及openssh的应用/">
 
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="Richie Jing">
-    <meta itemprop="description" content="">
-    <meta itemprop="image" content="/images/avatar.gif">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="Richie's Personal Blog">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="Richie's Personal Blog" src="">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Richie Jing">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://oxk9rl21s.bkt.clouddn.com/logo.jfif">
     </span>
-  </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Richie's Personal Blog">
+    </span>
 
     
       <header class="post-header">
@@ -1957,16 +1953,8 @@ recurse.jpg"></p>
         
         
           <h1 class="post-title" itemprop="name headline">
-            
-            
-              
                 
-                <a class="post-title-link" href="/2015/07/02/CentOS6下ssh简介及openssh的应用/" itemprop="url">
-                  CentOS6下ssh简介及openssh的应用
-                </a>
-              
-            
-          </h1>
+                <a class="post-title-link" href="/2015/07/02/CentOS6下ssh简介及openssh的应用/" itemprop="url">CentOS6下ssh简介及openssh的应用</a></h1>
         
 
         <div class="post-meta">
@@ -1978,7 +1966,7 @@ recurse.jpg"></p>
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2015-07-02T15:13:27+08:00">
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-07-02T15:13:27+08:00">
                 2015-07-02
               </time>
             
@@ -1995,8 +1983,8 @@ recurse.jpg"></p>
           
 
           
-
           
+
           
 
           
@@ -2007,7 +1995,9 @@ recurse.jpg"></p>
       </header>
     
 
-
+    
+    
+    
     <div class="post-body" itemprop="articleBody">
 
       
@@ -2154,17 +2144,19 @@ recurse.jpg"></p>
         
       
     </div>
+    
+    
+    
 
-    <div>
-      
-    </div>
+    
 
-    <div>
-      
-    </div>
+    
 
+    
 
     <footer class="post-footer">
+      
+
       
 
       
@@ -2174,6 +2166,10 @@ recurse.jpg"></p>
         <div class="post-eof"></div>
       
     </footer>
+  </div>
+  
+  
+  
   </article>
 
 
@@ -2206,60 +2202,71 @@ recurse.jpg"></p>
   </div>
 
   <aside id="sidebar" class="sidebar">
+    
     <div class="sidebar-inner">
 
       
 
       
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
-        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <img class="site-author-image" itemprop="image"
-               src="/images/avatar.gif"
-               alt="Richie Jing" />
-          <p class="site-author-name" itemprop="name">Richie Jing</p>
-          <p class="site-description motion-element" itemprop="description">Window Server IT pro, love scripting.</p>
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="http://oxk9rl21s.bkt.clouddn.com/logo.jfif"
+                alt="Richie Jing" />
+            
+              <p class="site-author-name" itemprop="name">Richie Jing</p>
+              <p class="site-description motion-element" itemprop="description">Window Server IT pro, love scripting.</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">84</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
         </div>
-        <nav class="site-state motion-element">
-        
-          
-            <div class="site-state-item site-state-posts">
-              <a href="/archives">
-                <span class="site-state-item-count">84</span>
-                <span class="site-state-item-name">日志</span>
-              </a>
-            </div>
-          
-
-          
-
-          
-            <div class="site-state-item site-state-tags">
-              <a href="/tags">
-                <span class="site-state-item-count">12</span>
-                <span class="site-state-item-name">标签</span>
-              </a>
-            </div>
-          
-
-        </nav>
-
-        
-
-        <div class="links-of-author motion-element">
-          
-        </div>
-
-        
-        
-
-        
-        
-
-        
-
-
       </section>
+
+      
 
       
 
@@ -2273,38 +2280,50 @@ recurse.jpg"></p>
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright" >
-  
-  &copy; 
-  <span itemprop="copyrightYear">2017</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
   <span class="with-love">
-    <i class="fa fa-heart"></i>
+    <i class="fa fa-user"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">Richie Jing</span>
+
+  
 </div>
 
 
-<div class="powered-by">
-  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
-</div>
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
 
-<div class="theme-info">
-  主题 -
-  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
-    NexT.Pisces
-  </a>
-</div>
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.3</div>
+
+
 
 
         
+
+
+
+
+
+
 
         
       </div>
     </footer>
 
-    <div class="back-to-top">
-      <i class="fa fa-arrow-up"></i>
-    </div>
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
   </div>
 
   
@@ -2327,55 +2346,68 @@ recurse.jpg"></p>
 
 
 
-  
-  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
-
-  
-  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
-
-  
-  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
-
-  
-  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
-
-  
-  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
-
-  
-  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
 
 
-  
 
 
-  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
 
-  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
 
 
 
   
   
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
 
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
 
-  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
 
-  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
 
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
 
 
   
 
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+
   
 
 
-  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
 
 
 
   
-
 
 
   
@@ -2390,9 +2422,37 @@ recurse.jpg"></p>
 
 
   
+    
+
+    
+  
 
 
 
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
 
   
   
@@ -2402,9 +2462,6 @@ recurse.jpg"></p>
   
 
   
-
-  
-
 
 </body>
 </html>
