@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Powershell," />
+  <meta name="keywords" content="windows," />
 
 
 
@@ -84,34 +84,33 @@
 
 
 
-<meta name="description" content="想用本机来控制远程的机器
-远程机器的设置，主要是，在管理员权限下的PowerShell控制台中执行
-Enable-PSRemoting -force
-本机和远程机器如果在同一个域中，就只需要做上面的设置了。
-如果本机和远程机器不在同一个域，则可以通过设置域信任达到相同的目标。
-如果本机和远程机器都不在域中，则需要将远程机器加入到本机的TrustedHosts
-set-item wsman:loca">
+<meta name="description" content="公司要搞一个附件共享存储，也不知道怎么的要搞成windows共享，可能因为NTFS+AD域的权限模型比较灵活吧。折腾了好久才成功，记录下过程。
+思路全部环境都是windows Server2012 R2
+
+一台DC dc01.contoso.com
+一台WindowsServer搭建的共享目录 \Share01.contoso.com\demo
+一台WindowsServer搭建的应用服务器，运行">
 <meta property="og:type" content="article">
-<meta property="og:title" content="powershell的远程管理前提">
-<meta property="og:url" content="http://yoursite.com/2014/09/04/powershell的远程管理前提/index.html">
+<meta property="og:title" content="IIS的FTP站点架设 域账号 + windows共享存储的实现方法">
+<meta property="og:url" content="http://yoursite.com/2017/10/19/1IIS的FTP站点使用域身份验证且使用windows共享存储的实现方法/index.html">
 <meta property="og:site_name" content="Richie's Personal Blog">
-<meta property="og:description" content="想用本机来控制远程的机器
-远程机器的设置，主要是，在管理员权限下的PowerShell控制台中执行
-Enable-PSRemoting -force
-本机和远程机器如果在同一个域中，就只需要做上面的设置了。
-如果本机和远程机器不在同一个域，则可以通过设置域信任达到相同的目标。
-如果本机和远程机器都不在域中，则需要将远程机器加入到本机的TrustedHosts
-set-item wsman:loca">
-<meta property="og:updated_time" content="2017-01-29T02:01:28.000Z">
+<meta property="og:description" content="公司要搞一个附件共享存储，也不知道怎么的要搞成windows共享，可能因为NTFS+AD域的权限模型比较灵活吧。折腾了好久才成功，记录下过程。
+思路全部环境都是windows Server2012 R2
+
+一台DC dc01.contoso.com
+一台WindowsServer搭建的共享目录 \Share01.contoso.com\demo
+一台WindowsServer搭建的应用服务器，运行">
+<meta property="og:image" content="http://oxk9rl21s.bkt.clouddn.com/ftp_1.png?2017-10-20-13-01-14">
+<meta property="og:updated_time" content="2017-10-20T05:01:25.541Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="powershell的远程管理前提">
-<meta name="twitter:description" content="想用本机来控制远程的机器
-远程机器的设置，主要是，在管理员权限下的PowerShell控制台中执行
-Enable-PSRemoting -force
-本机和远程机器如果在同一个域中，就只需要做上面的设置了。
-如果本机和远程机器不在同一个域，则可以通过设置域信任达到相同的目标。
-如果本机和远程机器都不在域中，则需要将远程机器加入到本机的TrustedHosts
-set-item wsman:loca">
+<meta name="twitter:title" content="IIS的FTP站点架设 域账号 + windows共享存储的实现方法">
+<meta name="twitter:description" content="公司要搞一个附件共享存储，也不知道怎么的要搞成windows共享，可能因为NTFS+AD域的权限模型比较灵活吧。折腾了好久才成功，记录下过程。
+思路全部环境都是windows Server2012 R2
+
+一台DC dc01.contoso.com
+一台WindowsServer搭建的共享目录 \Share01.contoso.com\demo
+一台WindowsServer搭建的应用服务器，运行">
+<meta name="twitter:image" content="http://oxk9rl21s.bkt.clouddn.com/ftp_1.png?2017-10-20-13-01-14">
 
 
 
@@ -139,13 +138,13 @@ set-item wsman:loca">
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2014/09/04/powershell的远程管理前提/"/>
+  <link rel="canonical" href="http://yoursite.com/2017/10/19/1IIS的FTP站点使用域身份验证且使用windows共享存储的实现方法/"/>
 
 
 
 
 
-  <title> powershell的远程管理前提 | Richie's Personal Blog </title>
+  <title> IIS的FTP站点架设 域账号 + windows共享存储的实现方法 | Richie's Personal Blog </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -258,7 +257,7 @@ set-item wsman:loca">
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2014/09/04/powershell的远程管理前提/">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/19/1IIS的FTP站点使用域身份验证且使用windows共享存储的实现方法/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="Richie Jing">
@@ -282,7 +281,7 @@ set-item wsman:loca">
             
             
               
-                powershell的远程管理前提
+                IIS的FTP站点架设 域账号 + windows共享存储的实现方法
               
             
           </h1>
@@ -297,8 +296,8 @@ set-item wsman:loca">
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2014-09-04T21:55:11+08:00">
-                2014-09-04
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-10-19T15:36:12+08:00">
+                2017-10-19
               </time>
             
 
@@ -333,16 +332,26 @@ set-item wsman:loca">
       
 
       
-        <p>想用本机来控制远程的机器</p>
-<p>远程机器的设置，主要是，在管理员权限下的PowerShell控制台中执行</p>
-<p>Enable-PSRemoting -force</p>
-<p>本机和远程机器如果在同一个域中，就只需要做上面的设置了。</p>
-<p>如果本机和远程机器不在同一个域，则可以通过设置域信任达到相同的目标。</p>
-<p>如果本机和远程机器都不在域中，则需要将远程机器加入到本机的TrustedHosts</p>
-<p>set-item wsman:localhost\client\trustedhosts -value &lt;远程机器名&gt;</p>
-<p>然后就可以建立远程会话了</p>
-<p>New-PSSession -ComputerName &lt;远程机器名&gt;</p>
-<p>在通过Invoke-Command就可以让在远程机器上运行对应的脚本了</p>
+        <p>公司要搞一个附件共享存储，也不知道怎么的要搞成windows共享，可能因为NTFS+AD域的权限模型比较灵活吧。<br>折腾了好久才成功，记录下过程。</p>
+<h1 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h1><p>全部环境都是windows Server2012 R2</p>
+<ul>
+<li>一台DC dc01.contoso.com</li>
+<li>一台WindowsServer搭建的共享目录 \Share01.contoso.com\demo</li>
+<li>一台WindowsServer搭建的应用服务器，运行着IIS搭建的FTP站点 ftp.contoso.com</li>
+</ul>
+<h2 id="第一次失败的尝试"><a href="#第一次失败的尝试" class="headerlink" title="第一次失败的尝试"></a>第一次失败的尝试</h2><ol>
+<li>打开共享目录的everyone read权限</li>
+<li>在share01上将demo目录NTFS权限加上域账号share_ro可以只读此目录</li>
+<li>在ftp.contoso.com上映射网络磁盘\Share01.contoso.com\demo为本地Z盘</li>
+<li>在ftp.contoso.com上安装默认IIS+FTP组件</li>
+<li>在ftp.contoso.com上添加FTP站点</li>
+<li>在ftp.contoso.com上配置FTP的“FTP授权规则”，添加contoso\share_ro用户为只读</li>
+</ol>
+<p>测试ftp://share01.contoso.com/demo 然后并不能访问成功。 折腾了好久看到<a href="https://support.microsoft.com/en-us/help/257174/using-mapped-drives-with-iis" target="_blank" rel="external">这篇kb</a><br>原来IIS的FTP站点不支持网络映射的服务器，解决办法是创建FTP站点时候直接使用UNC路径指向该站点的物理路径。</p>
+<p>##大概原理是：<br>映射驱动器只是当前用户执行 <code>net use</code>的一种扩展形式，生效的注册表也仅仅是在Hkey_Current_User下，就算是你勾选了使用其他凭证连接，并且重新登录重新挂载，也会有性能上的影响，每次访问都有造成两次身份验证，一次是是IIS的身份验证，第二次是映射驱动器时候的身份验证。</p>
+<p>也就是说， 不能使用z:\demo的方式来选择 网络驱动器映射的本地盘来用域身份来访问，必须要使用\x.x.x.x\demo的UNC方式直接访问才可以<br>看图<br><img src="http://oxk9rl21s.bkt.clouddn.com/ftp_1.png?2017-10-20-13-01-14" alt="ftp_1.png"></p>
+<h2 id="推荐的方式："><a href="#推荐的方式：" class="headerlink" title="推荐的方式："></a>推荐的方式：</h2><p>直接使用UNC路径来直接访问，就没有这些问题了。</p>
+<h2 id="相关的文章"><a href="#相关的文章" class="headerlink" title="相关的文章"></a>相关的文章</h2><p>想要弄明白IIS是如何在网络存储上处理凭证，如何访问网络文件 可以参考下面两个KB：<br><a href="https://support.microsoft.com/EN-US/help/222069" target="_blank" rel="external">IIS 4.0 Requires Username and Password When Using a Remote Computer</a><br><a href="https://support.microsoft.com/EN-US/help/207671" target="_blank" rel="external">207671 Accessing Network Files from IIS Applications</a></p>
 
       
     </div>
@@ -366,7 +375,7 @@ set-item wsman:loca">
       
         <div class="post-tags">
           
-            <a href="/tags/Powershell/" rel="tag"># Powershell</a>
+            <a href="/tags/windows/" rel="tag"># windows</a>
           
         </div>
       
@@ -375,8 +384,8 @@ set-item wsman:loca">
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2014/09/02/用powershell检测tcp端口连通性/" rel="next" title="用powershell检测tcp端口连通性">
-                <i class="fa fa-chevron-left"></i> 用powershell检测tcp端口连通性
+              <a href="/2017/10/17/Windows10配置ssh-key免密登录github/" rel="next" title="Windows10配置ssh-key免密登录github">
+                <i class="fa fa-chevron-left"></i> Windows10配置ssh-key免密登录github
               </a>
             
           </div>
@@ -384,10 +393,6 @@ set-item wsman:loca">
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2014/09/11/使用powershell发送邮件/" rel="prev" title="使用powershell发送邮件">
-                使用powershell发送邮件 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -434,8 +439,17 @@ set-item wsman:loca">
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/avatar.gif"
@@ -484,6 +498,22 @@ set-item wsman:loca">
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#思路"><span class="nav-number">1.</span> <span class="nav-text">思路</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#第一次失败的尝试"><span class="nav-number">1.1.</span> <span class="nav-text">第一次失败的尝试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#推荐的方式："><span class="nav-number">1.2.</span> <span class="nav-text">推荐的方式：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#相关的文章"><span class="nav-number">1.3.</span> <span class="nav-text">相关的文章</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
     </div>
