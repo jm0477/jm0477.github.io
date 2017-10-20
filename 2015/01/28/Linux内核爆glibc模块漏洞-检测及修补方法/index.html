@@ -426,7 +426,8 @@ security/2015/01/27/9" target="_blank" rel="external">这里</a>。</p>
   
     <div class="comments" id="comments">
       
-        <div id="gitment-container"></div>
+        <div onclick="showGitment()" id="gitment-display-button">显示 Gitment 评论</div>
+        <div id="gitment-container" style="display:none"></div>
       
     </div>
 
@@ -696,13 +697,18 @@ security/2015/01/27/9" target="_blank" rel="external">这里</a>。</p>
 <!-- END LOCAL -->
 
     
+      <style>
+        a.gitment-editor-footer-tip { display: none; }
+        .gitment-container.gitment-footer-container { display: none; }
+      </style>
+    
 
     
       <script type="text/javascript">
       function renderGitment(){
         var gitment = new Gitmint({
             id: window.location.pathname, 
-            owner: '6084100',
+            owner: 'jm0477',
             repo: 'jm0477.github.io',
             
             lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
@@ -718,7 +724,11 @@ security/2015/01/27/9" target="_blank" rel="external">这里</a>。</p>
       }
 
       
-      renderGitment();
+      function showGitment(){
+        document.getElementById("gitment-display-button").style.display = "none";
+        document.getElementById("gitment-container").style.display = "block";
+        renderGitment();
+      }
       
       </script>
     
