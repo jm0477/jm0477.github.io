@@ -101,7 +101,7 @@
 一台WindowsServer搭建的共享目录 \Share01.contoso.com\demo
 一台WindowsServer搭建的应用服务器，运行">
 <meta property="og:image" content="http://oxk9rl21s.bkt.clouddn.com/ftp_1.png?2017-10-20-13-01-14">
-<meta property="og:updated_time" content="2017-10-20T05:01:25.541Z">
+<meta property="og:updated_time" content="2017-10-20T05:21:42.160Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="IIS的FTP站点架设 域账号 + windows共享存储的实现方法">
 <meta name="twitter:description" content="公司要搞一个附件共享存储，也不知道怎么的要搞成windows共享，可能因为NTFS+AD域的权限模型比较灵活吧。折腾了好久才成功，记录下过程。
@@ -339,7 +339,7 @@
 <li>一台WindowsServer搭建的共享目录 \Share01.contoso.com\demo</li>
 <li>一台WindowsServer搭建的应用服务器，运行着IIS搭建的FTP站点 ftp.contoso.com</li>
 </ul>
-<h2 id="第一次失败的尝试"><a href="#第一次失败的尝试" class="headerlink" title="第一次失败的尝试"></a>第一次失败的尝试</h2><ol>
+<h2 id="一次失败的尝试"><a href="#一次失败的尝试" class="headerlink" title="一次失败的尝试"></a>一次失败的尝试</h2><ol>
 <li>打开共享目录的everyone read权限</li>
 <li>在share01上将demo目录NTFS权限加上域账号share_ro可以只读此目录</li>
 <li>在ftp.contoso.com上映射网络磁盘\Share01.contoso.com\demo为本地Z盘</li>
@@ -348,9 +348,26 @@
 <li>在ftp.contoso.com上配置FTP的“FTP授权规则”，添加contoso\share_ro用户为只读</li>
 </ol>
 <p>测试ftp://share01.contoso.com/demo 然后并不能访问成功。 折腾了好久看到<a href="https://support.microsoft.com/en-us/help/257174/using-mapped-drives-with-iis" target="_blank" rel="external">这篇kb</a><br>原来IIS的FTP站点不支持网络映射的服务器，解决办法是创建FTP站点时候直接使用UNC路径指向该站点的物理路径。</p>
-<p>##大概原理是：<br>映射驱动器只是当前用户执行 <code>net use</code>的一种扩展形式，生效的注册表也仅仅是在Hkey_Current_User下，就算是你勾选了使用其他凭证连接，并且重新登录重新挂载，也会有性能上的影响，每次访问都有造成两次身份验证，一次是是IIS的身份验证，第二次是映射驱动器时候的身份验证。</p>
+<h2 id="原理是："><a href="#原理是：" class="headerlink" title="原理是："></a>原理是：</h2><p>映射驱动器只是当前用户执行 <code>net use</code>的一种扩展形式，生效的注册表也仅仅是在Hkey_Current_User下，就算是你勾选了使用其他凭证连接，并且重新登录重新挂载，也会有性能上的影响，每次访问都有造成两次身份验证，一次是是IIS的身份验证，第二次是映射驱动器时候的身份验证。</p>
 <p>也就是说， 不能使用z:\demo的方式来选择 网络驱动器映射的本地盘来用域身份来访问，必须要使用\x.x.x.x\demo的UNC方式直接访问才可以<br>看图<br><img src="http://oxk9rl21s.bkt.clouddn.com/ftp_1.png?2017-10-20-13-01-14" alt="ftp_1.png"></p>
-<h2 id="推荐的方式："><a href="#推荐的方式：" class="headerlink" title="推荐的方式："></a>推荐的方式：</h2><p>直接使用UNC路径来直接访问，就没有这些问题了。</p>
+<h2 id="成功配置的步骤："><a href="#成功配置的步骤：" class="headerlink" title="成功配置的步骤："></a>成功配置的步骤：</h2><p>直接使用UNC路径来直接访问，具体步骤如下：</p>
+<ol>
+<li>打开共享目录的everyone read权限</li>
+<li>在share01上将demo目录NTFS权限加上域账号share_ro可以只读此目录</li>
+<li>在ftp.contoso.com上映射网络磁盘\Share01.contoso.com\demo为本地Z盘</li>
+<li>在ftp.contoso.com上安装默认IIS+FTP组件</li>
+<li>在ftp.contoso.com上添加FTP站点，站点物理路径不要选择，直接输入UNC路径\share01\demo即可</li>
+<li>在ftp.contoso.com上配置FTP的“FTP授权规则”，添加contoso\share_ro用户为只读</li>
+</ol>
+<p>测试登陆即可</p>
+<p>— 推荐使用安全组来分别控制文件系统及FTP的只读和读写权限，概念如下</p>
+<ul>
+<li>使用域控创建两个Global Security Group</li>
+<li>一个只读 一个读写， 命名规则通常为xxx_RO/xxx_RW</li>
+<li>将安全组附加在NTFS文件夹的ACL上，就是通常的文件–右键–属性–安全</li>
+<li>在IIS的FTP站点上配置，”FTP授权规则”，这里直接填写允许的组为第二部创建的安全组即可。</li>
+</ul>
+<p>这样的好处在于一次配置一劳永逸，再也不用担心权限模型的修改了，只需要将相关的用户加入xxx_RO或者xxx_RW就可以来控制只读/读写权限，省去管理员大量的配置时间及可能出现的人为错误。</p>
 <h2 id="相关的文章"><a href="#相关的文章" class="headerlink" title="相关的文章"></a>相关的文章</h2><p>想要弄明白IIS是如何在网络存储上处理凭证，如何访问网络文件 可以参考下面两个KB：<br><a href="https://support.microsoft.com/EN-US/help/222069" target="_blank" rel="external">IIS 4.0 Requires Username and Password When Using a Remote Computer</a><br><a href="https://support.microsoft.com/EN-US/help/207671" target="_blank" rel="external">207671 Accessing Network Files from IIS Applications</a></p>
 
       
@@ -508,7 +525,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#思路"><span class="nav-number">1.</span> <span class="nav-text">思路</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#第一次失败的尝试"><span class="nav-number">1.1.</span> <span class="nav-text">第一次失败的尝试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#推荐的方式："><span class="nav-number">1.2.</span> <span class="nav-text">推荐的方式：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#相关的文章"><span class="nav-number">1.3.</span> <span class="nav-text">相关的文章</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#思路"><span class="nav-number">1.</span> <span class="nav-text">思路</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#一次失败的尝试"><span class="nav-number">1.1.</span> <span class="nav-text">一次失败的尝试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#原理是："><span class="nav-number">1.2.</span> <span class="nav-text">原理是：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#成功配置的步骤："><span class="nav-number">1.3.</span> <span class="nav-text">成功配置的步骤：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#相关的文章"><span class="nav-number">1.4.</span> <span class="nav-text">相关的文章</span></a></li></ol></li></ol></div>
             
 
           </div>
