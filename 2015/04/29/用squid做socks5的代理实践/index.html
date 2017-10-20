@@ -299,6 +299,16 @@ sudo pip install shadowsocks">
 
           
             
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2015/04/29/用squid做socks5的代理实践/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid="/2015/04/29/用squid做socks5的代理实践/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
           
 
           
@@ -450,7 +460,9 @@ never_direct allow all
 
   
     <div class="comments" id="comments">
-      <div id="uyan_frame"></div>
+      
+        <div id="gitment-container"></div>
+      
     </div>
 
   
@@ -697,14 +709,6 @@ never_direct allow all
 
 
   
-    
-
-    
-      <!-- UY BEGIN -->
-      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2146945"></script>
-      <!-- UY END -->
-    
-  
 
 
 
@@ -716,6 +720,43 @@ never_direct allow all
 
 
 
+
+
+<!-- LOCAL: You can save these files to your site and update links -->
+    
+        
+        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
+        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
+    
+<!-- END LOCAL -->
+
+    
+
+    
+      <script type="text/javascript">
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: window.location.pathname, 
+            owner: 'jm0477',
+            repo: 'jm0477.github.io',
+            
+            lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: 'bacec54137ddb6460a2eeabe4c242e5d4ed140c7',
+            
+                client_id: '64fe50d197ff6f267aa0'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
+    
 
 
 

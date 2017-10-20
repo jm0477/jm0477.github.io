@@ -301,6 +301,16 @@
 
           
             
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/10/19/IIS的FTP站点使用域身份验证且使用windows共享存储的实现方法/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid="/2017/10/19/IIS的FTP站点使用域身份验证且使用windows共享存储的实现方法/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
           
 
           
@@ -431,7 +441,9 @@
 
   
     <div class="comments" id="comments">
-      <div id="uyan_frame"></div>
+      
+        <div id="gitment-container"></div>
+      
     </div>
 
   
@@ -703,14 +715,6 @@
 
 
   
-    
-
-    
-      <!-- UY BEGIN -->
-      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2146945"></script>
-      <!-- UY END -->
-    
-  
 
 
 
@@ -722,6 +726,43 @@
 
 
 
+
+
+<!-- LOCAL: You can save these files to your site and update links -->
+    
+        
+        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
+        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
+    
+<!-- END LOCAL -->
+
+    
+
+    
+      <script type="text/javascript">
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: window.location.pathname, 
+            owner: 'jm0477',
+            repo: 'jm0477.github.io',
+            
+            lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: 'bacec54137ddb6460a2eeabe4c242e5d4ed140c7',
+            
+                client_id: '64fe50d197ff6f267aa0'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
+    
 
 
 
